@@ -58,7 +58,9 @@ class Ship(sprite.Sprite):
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         self.keys = 0
-        self.img = pygame.image.load('imgs/cards/pngs/player2.png').convert_alpha()
+        self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
+        self.normal = self.img
+        self.jumping = pygame.image.load('imgs/cards/pngs/jumping2.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
@@ -109,7 +111,12 @@ class Ship(sprite.Sprite):
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         if self.vy < 0:
+            rect = pygame.Rect(self.x-self.viewx1-60, self.y-145, 120, 120)
+            self.img = self.jumping
+            
             fire.Fire(self.game, self.x, self.y, -self.vx, -self.vy)
+        else:
+            self.img = self.normal
 
     def draw(self):
         rect = pygame.Rect(self.x-self.viewx1-60, self.y-145, 120, 120)
