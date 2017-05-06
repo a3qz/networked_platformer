@@ -58,8 +58,7 @@ class Ship(sprite.Sprite):
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         self.keys = 0
-        self.img = pygame.image.load('imgs/cards/pngs/jack_of_hearts2.png').convert_alpha()
-        self.img = pygame.transform.scale(self.img, (100, 145))
+        self.img = pygame.image.load('imgs/cards/pngs/player2.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
