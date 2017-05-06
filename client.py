@@ -5,7 +5,7 @@ from twisted.internet import reactor
 #from twisted.internet.task import LoopingCall
 from twisted.internet.defer import DeferredQueue
 
-HOME_HOST = "localhost"
+HOME_HOST = "ash.campus.nd.edu"
 HOME_PORT = 40060
 
 class DaBears(Protocol):
