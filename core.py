@@ -9,6 +9,7 @@ import wall
 import constants
 import client
 from struct import *
+import board
 
 class Game:
     def __init__(self, s):
@@ -18,8 +19,7 @@ class Game:
         self.connection = None
         self.t = 0
         client.DaFactory(self)
-        for i in range(0, constants.WIDTH, 32):
-            wall.Wall(self, i, constants.HEIGHT-32)
+        self.board = board.Board(self)
 
 
     def tick(self):

@@ -6,6 +6,7 @@ import math
 import bullet
 import fire
 import sprite
+import constants
 import wall
 
 
@@ -52,6 +53,8 @@ class Ship(sprite.Sprite):
         super(Ship, self).__init__(game)
         self.x = x
         self.y = y
+        self.viewx1 = self.x-constants.WIDTH/2
+        self.viewx2 = self.x+constants.WIDTH/2
         self.keys = 0
         self.img = pygame.image.load('imgs/player.png').convert_alpha()
         self.firing = False
@@ -80,11 +83,13 @@ class Ship(sprite.Sprite):
             self.vy += 1
             if self.vy > 12:
                 self.vy = 12
+        self.viewx1 = self.x-constants.WIDTH/2
+        self.viewx2 = self.x+constants.WIDTH/2
         if self.vy < 0:
             fire.Fire(self.game, self.x, self.y, -self.vx, -self.vy)
 
     def draw(self):
-        rect = pygame.Rect(self.x-60, self.y-60, 120, 120)
+        rect = pygame.Rect(self.x-self.viewx1-60, self.y-60, 120, 120)
         mouse = pygame.mouse.get_pos()
         angle = 180-math.degrees(math.atan2(self.y - mouse[1], self.x - mouse[0]))
         rot_image = pygame.transform.rotate(self.img, angle)
