@@ -17,8 +17,6 @@ class ClientConnection(Protocol):
         print("Client connected!")
         self.factory.addMore()
         self.q = DeferredQueue()
-        #self.startForwarding()
-        self.factory.sendMe(self, pack("BIIiiB", 0, 0, 0, 0, 0, 0))
 
     def startForwarding(self):
         self.q.get().addCallback(self.wordForward)

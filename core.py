@@ -50,19 +50,20 @@ class Game:
     def handleData(self, data):
         uid = unpack("B", data[0])[0]
         data = unpack("BIIiiB", data[1:22])
-        #data is in the form (SENDER_ID, MESSAGE_TYPE, data...)
         if data[0] == 0:
-            #then data is a join message
-            player.Shadow(self, uid)
-            print "PLAYER {} JOINED!".format(uid)
-        elif data[0] == 1:
-            #then data is an update message
             for o in self.objects:
                 if isinstance(o, player.Shadow) and o.uid == uid:
                     o.x  = data[1]
                     o.y  = data[2]
                     o.vx = data[3]
                     o.vy = data[4]
+                    return
+            o = player.Shadow(self, uid)
+            o.x  = data[1]
+            o.y  = data[2]
+            o.vx = data[3]
+            o.vy = data[4]
+            print "PLAYER {} JOINED!".format(uid)
 
     def sendPlayer(self):
         if not self.connection: return
@@ -74,4 +75,3 @@ class Game:
 
     def connected(self, connection):
         self.connection = connection
-        self.connection.send(pack("BIIiiB", 0, 0, 0, 0, 0, 0))
