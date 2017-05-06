@@ -20,6 +20,7 @@ class Game:
         self.t = 0
         client.DaFactory(self)
         self.board = board.Board(self)
+        self.board.parse("./levels/1.lvl")
 
 
     def tick(self):
