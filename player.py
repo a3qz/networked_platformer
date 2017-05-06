@@ -14,7 +14,8 @@ import spikes
 class Shadow(sprite.Sprite):
     def __init__(self, game, uid):
         super(Shadow, self).__init__(game)
-        self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
+        self.num = random.randint(2,4)
+        self.img = pygame.image.load('imgs/cards/pngs/player{}.png'.format(str(self.num))).convert_alpha()
 
         self.uid = uid
         self.height = 145
@@ -55,7 +56,7 @@ class Ship(sprite.Sprite):
         self.keys = 0
         self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
         self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/pngs/jumping2.png').convert_alpha()
+        self.jumping = pygame.image.load('imgs/cards/pngs/jumping.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
