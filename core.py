@@ -28,7 +28,7 @@ class Game:
                 if b.tick():
                    b.die()
                    self.objects.remove(b)
-            self.t = (self.t + 1) % 2
+            self.t = (self.t + 1) % 20
             if self.t == 0:
                 self.sendPlayer()
         except Exception as E:
@@ -40,8 +40,10 @@ class Game:
 
     def handleKeyDown(self, k):
         self.player.handleKeyDown(k)
+        self.sendPlayer()
     def handleKeyUp(self, k):
         self.player.handleKeyUp(k)
+        self.sendPlayer()
     def handleMUP(self, xxt, yyt):
         self.player.handleMUP(xxt, yyt)
     def handleMDOWN(self, xxt, yyt):
