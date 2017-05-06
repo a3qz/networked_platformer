@@ -17,7 +17,7 @@ class ClientConnection(Protocol):
         print("Client connected!")
         self.factory.addMore()
         self.q = DeferredQueue()
-        self.startForwarding()
+        #self.startForwarding()
         self.factory.sendMe(self, pack("BIIiiB", 0, 0, 0, 0, 0, 0))
 
     def startForwarding(self):
@@ -31,7 +31,8 @@ class ClientConnection(Protocol):
             print E
 
     def dataReceived(self, data):
-        self.q.put(data)
+        self.transport.write(data)
+        #self.q.put(data)
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
