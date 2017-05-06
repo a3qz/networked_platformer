@@ -50,20 +50,19 @@ class Game:
     def handleData(self, data):
         uid = unpack("B", data[0])[0]
         data = unpack("BIIiiB", data[1:22])
-        if data[0] == 0:
-            for o in self.objects:
-                if isinstance(o, player.Shadow) and o.uid == uid:
-                    o.x  = data[1]
-                    o.y  = data[2]
-                    o.vx = data[3]
-                    o.vy = data[4]
-                    return
-            o = player.Shadow(self, uid)
-            o.x  = data[1]
-            o.y  = data[2]
-            o.vx = data[3]
-            o.vy = data[4]
-            print "PLAYER {} JOINED!".format(uid)
+        for o in self.objects:
+            if isinstance(o, player.Shadow) and o.uid == uid:
+                o.x  = data[1]
+                o.y  = data[2]
+                o.vx = data[3]
+                o.vy = data[4]
+                return
+        o = player.Shadow(self, uid)
+        o.x  = data[1]
+        o.y  = data[2]
+        o.vx = data[3]
+        o.vy = data[4]
+        print "PLAYER {} JOINED!".format(uid)
 
     def sendPlayer(self):
         if not self.connection: return

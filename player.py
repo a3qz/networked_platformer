@@ -15,9 +15,37 @@ class Shadow(sprite.Sprite):
         self.img = pygame.image.load('imgs/player.png').convert_alpha()
 
         self.uid = uid
+
     def draw(self):
         rect = pygame.Rect(self.x-60, self.y-60, 120, 120)
-        self.game.screen.blit(self.img, rect)
+        mouse = pygame.mouse.get_pos()
+        angle = 180-math.degrees(math.atan2(self.y - mouse[1], self.x - mouse[0]))
+        rot_image = pygame.transform.rotate(self.img, angle)
+        rot_rect = rot_image.get_rect(center=rect.center)
+        self.game.screen.blit(rot_image, rot_rect)
+    def wall_below(self):
+        for w in self.game.objects:
+            if isinstance(w, wall.Wall):
+                if self.x < w.x:      continue
+                if self.x > w.x + 32: continue
+                if self.y > w.y + 32: continue
+                if self.y < w.y:      continue
+                return w
+        return None
+
+    def tick(self):
+        self.x += self.vx
+        w = self.wall_below()
+        if w:
+            self.y = w.y
+            self.vy = 0
+        else:
+            self.y += self.vy
+            self.vy += 1
+            if self.vy > 12:
+                self.vy = 12
+        if self.vy < 0:
+            fire.Fire(self.game, self.x, self.y, -self.vx, -self.vy)
 
 class Ship(sprite.Sprite):
     def __init__(self, game, x, y):
