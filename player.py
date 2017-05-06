@@ -13,7 +13,7 @@ import wall
 class Shadow(sprite.Sprite):
     def __init__(self, game, uid):
         super(Shadow, self).__init__(game)
-        self.img = pygame.image.load('imgs/player.png').convert_alpha()
+        self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
 
         self.uid = uid
 
@@ -24,7 +24,7 @@ class Shadow(sprite.Sprite):
             self.x - mouse[0] - self.game.player.viewx1))
         rot_image = pygame.transform.rotate(self.img, angle)
         rot_rect = rot_image.get_rect(center=rect.center)
-        self.game.screen.blit(rot_image, rot_rect)
+        self.game.screen.blit(self.img, rect)
     def wall_below(self):
         for w in self.game.objects:
             if isinstance(w, wall.Wall):
@@ -57,7 +57,8 @@ class Ship(sprite.Sprite):
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         self.keys = 0
-        self.img = pygame.image.load('imgs/player.png').convert_alpha()
+        self.img = pygame.image.load('imgs/cards/pngs/jack_of_hearts2.png').convert_alpha()
+        self.img = pygame.transform.scale(self.img, (100, 145))
         self.firing = False
 
     def wall_below(self):
@@ -96,7 +97,7 @@ class Ship(sprite.Sprite):
             self.x - mouse[0] - self.viewx1))
         rot_image = pygame.transform.rotate(self.img, angle)
         rot_rect = rot_image.get_rect(center=rect.center)
-        self.game.screen.blit(rot_image, rot_rect)
+        self.game.screen.blit(self.img, rect)
         if self.firing:
             angle = math.radians(angle)
             bvx = math.cos(angle)
