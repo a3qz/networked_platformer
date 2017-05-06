@@ -17,6 +17,7 @@ class Shadow(sprite.Sprite):
         self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
 
         self.uid = uid
+        self.height = 145
 
     def draw(self):
         rect = pygame.Rect(self.x-self.game.player.viewx1-60, self.y-145, 120, 120)
@@ -26,21 +27,14 @@ class Shadow(sprite.Sprite):
         rot_image = pygame.transform.rotate(self.img, angle)
         rot_rect = rot_image.get_rect(center=rect.center)
         self.game.screen.blit(self.img, rect)
-    def wall_below(self):
-        for w in self.game.objects:
-            if isinstance(w, wall.Wall):
-                if self.x < w.x:      continue
-                if self.x > w.x + 32: continue
-                if self.y > w.y + 32: continue
-                if self.y < w.y:      continue
-                return w
-        return None
 
     def tick(self):
         self.x += self.vx
-        w = self.wall_below()
+        w = self.thing_at(wall.Wall, 32, 32, 0, 0) or (
+            self.thing_at(Ship, 50, 0, -50, -145) or (
+            self.thing_at(Shadow, 50, 0, -50, -145)))
         if w:
-            self.y = w.y
+            self.y = w.y - w.height
             self.vy = 0
         else:
             self.y += self.vy
@@ -57,6 +51,7 @@ class Ship(sprite.Sprite):
         self.y = self.ystart = y
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
+        self.height = 145
         self.keys = 0
         self.img = pygame.image.load('imgs/cards/pngs/player2.png').convert_alpha()
         self.firing = False
@@ -64,19 +59,6 @@ class Ship(sprite.Sprite):
 
     def gotoDead(self):
         self.dead_ticks = constants.DEAD_TIME
-
-    def thing_below(self, c):
-        for w in self.game.objects:
-            if isinstance(w, c):
-                if self.x < w.x:      continue
-                if self.x > w.x + 32: continue
-                if self.y > w.y + 32: continue
-                if self.y < w.y:      continue
-                return w
-        return None
-
-    def wall_below(self):
-        return self.thing_below(wall.Wall)
 
     def tick(self):
         if self.dead_ticks > 0:
@@ -89,9 +71,10 @@ class Ship(sprite.Sprite):
             return False
 
         self.x += self.vx
-        w = self.wall_below()
+        w = self.thing_at(wall.Wall, 32, 32, 0, 0) or (
+            self.thing_at(Shadow, 50, 0, -50, -145))
         if w:
-            self.y = w.y
+            self.y = w.y - w.height
             self.vy = 0
             if ((self.keys & 4)>>2) > 0:
                 self.vy = -20
@@ -102,7 +85,7 @@ class Ship(sprite.Sprite):
             if self.vy > 12:
                 self.vy = 12
 
-        w = self.thing_below(spikes.Spike)
+        w = self.thing_at(spikes.Spike, 32, 32, 0, 0)
         if self.y > constants.HEIGHT*1.5 or w:
             self.gotoDead()
 
