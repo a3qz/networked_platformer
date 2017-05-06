@@ -8,6 +8,7 @@ import fire
 import sprite
 import constants
 import wall
+import spikes
 
 
 class Shadow(sprite.Sprite):
@@ -52,18 +53,22 @@ class Shadow(sprite.Sprite):
 class Ship(sprite.Sprite):
     def __init__(self, game, x, y):
         super(Ship, self).__init__(game)
-        self.x = x
-        self.y = y
+        self.x = self.xstart = x
+        self.y = self.ystart = y
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         self.keys = 0
         self.img = pygame.image.load('imgs/cards/pngs/jack_of_hearts2.png').convert_alpha()
         self.img = pygame.transform.scale(self.img, (100, 145))
         self.firing = False
+        self.dead_ticks = 0
 
-    def wall_below(self):
+    def gotoDead(self):
+        self.dead_ticks = constants.DEAD_TIME
+
+    def thing_below(self, c):
         for w in self.game.objects:
-            if isinstance(w, wall.Wall):
+            if isinstance(w, c):
                 if self.x < w.x:      continue
                 if self.x > w.x + 32: continue
                 if self.y > w.y + 32: continue
@@ -71,7 +76,19 @@ class Ship(sprite.Sprite):
                 return w
         return None
 
+    def wall_below(self):
+        return self.thing_below(wall.Wall)
+
     def tick(self):
+        if self.dead_ticks > 0:
+            self.dead_ticks -= 1
+            self.x = 300
+            self.y = 4444
+            if self.dead_ticks == 0:
+                self.x = self.xstart
+                self.y = self.ystart
+            return False
+
         self.x += self.vx
         w = self.wall_below()
         if w:
@@ -85,6 +102,11 @@ class Ship(sprite.Sprite):
             self.vy += 1
             if self.vy > 12:
                 self.vy = 12
+
+        w = self.thing_below(spikes.Spike)
+        if self.y > constants.HEIGHT*1.5 or w:
+            self.gotoDead()
+
         self.viewx1 = self.x-constants.WIDTH/2
         self.viewx2 = self.x+constants.WIDTH/2
         if self.vy < 0:

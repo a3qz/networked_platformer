@@ -19,13 +19,11 @@ class Board:
         self.game = game
         for i in range(0, self.ysize, 32):
             wall.Wall(game, i, constants.HEIGHT-32)
-        spikes.Spike(game, 64, constants.HEIGHT-48)
 
     def parse(self, name):
         #first delete all spike and wall objects
-        for o in self.game.objects:
-            if isinstance(o, wall.Terrain):
-                self.game.objects.remove(o)
+        self.game.objects = [o for o in self.game.objects 
+                             if not isinstance(o, wall.Terrain)]
         with open(name) as f:
             for l in f:
                 d = [int(x) for x in l.split()]
