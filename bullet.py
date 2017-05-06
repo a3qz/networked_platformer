@@ -38,8 +38,10 @@ class Bullet(sprite.Sprite):
         return self.hp <= 0
     
     def draw(self):
+        xx = self.game.player.viewx1
         pygame.draw.line(self.game.screen, (255, 0, 0),
-                (self.x, self.y), (self.game.player.x, self.game.player.y))
+                (self.x-xx, self.y),
+                (self.game.player.x-xx, self.game.player.y))
 
     def die(self):
         fire.Fire(self.game, self.x, self.y, 0, -2)

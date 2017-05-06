@@ -23,7 +23,8 @@ class Fire(sprite.Sprite):
         return self.hp <= 0
 
     def draw(self):
-        self.rect = pygame.Rect(self.x-16, self.y-16, 32, 32)
+        self.rect = pygame.Rect(self.x-16-self.game.player.viewx1, 
+                                self.y-16, 32, 32)
         n = pygame.Surface((32, 32), pygame.SRCALPHA, 32)
         m = self.img.copy()
         n.fill((127, 127*self.hp/self.maxhp, 0, 127))

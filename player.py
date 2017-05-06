@@ -20,7 +20,8 @@ class Shadow(sprite.Sprite):
     def draw(self):
         rect = pygame.Rect(self.x-self.game.player.viewx1-60, self.y-60, 120, 120)
         mouse = pygame.mouse.get_pos()
-        angle = 180-math.degrees(math.atan2(self.y - mouse[1], self.x - mouse[0]))
+        angle = 180-math.degrees(math.atan2(self.y - mouse[1],
+            self.x - mouse[0] - self.game.player.viewx1))
         rot_image = pygame.transform.rotate(self.img, angle)
         rot_rect = rot_image.get_rect(center=rect.center)
         self.game.screen.blit(rot_image, rot_rect)
@@ -91,7 +92,8 @@ class Ship(sprite.Sprite):
     def draw(self):
         rect = pygame.Rect(self.x-self.viewx1-60, self.y-60, 120, 120)
         mouse = pygame.mouse.get_pos()
-        angle = 180-math.degrees(math.atan2(self.y - mouse[1], self.x - mouse[0]))
+        angle = 180-math.degrees(math.atan2(self.y - mouse[1],
+            self.x - mouse[0] - self.viewx1))
         rot_image = pygame.transform.rotate(self.img, angle)
         rot_rect = rot_image.get_rect(center=rect.center)
         self.game.screen.blit(rot_image, rot_rect)
