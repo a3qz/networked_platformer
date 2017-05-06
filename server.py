@@ -31,8 +31,9 @@ class ClientConnection(Protocol):
             print E
 
     def dataReceived(self, data):
-        self.transport.write(data)
+        #self.transport.write(data)
         #self.q.put(data)
+        self.factory.send(self, data)
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
