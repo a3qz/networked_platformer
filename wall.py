@@ -17,5 +17,5 @@ class Wall(sprite.Sprite):
 
     def draw(self):
         pygame.draw.rect(self.game.screen, (120, 120, 120),
-                         (self.x, self.y, 32, 32), 1)
+                         (self.x - self.game.player.viewx1, self.y, 32, 32), 1)
 
