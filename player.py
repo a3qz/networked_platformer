@@ -18,7 +18,7 @@ class Shadow(sprite.Sprite):
         self.uid = uid
 
     def draw(self):
-        rect = pygame.Rect(self.x-60, self.y-60, 120, 120)
+        rect = pygame.Rect(self.x-self.game.player.viewx1-60, self.y-60, 120, 120)
         mouse = pygame.mouse.get_pos()
         angle = 180-math.degrees(math.atan2(self.y - mouse[1], self.x - mouse[0]))
         rot_image = pygame.transform.rotate(self.img, angle)
