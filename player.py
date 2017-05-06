@@ -82,10 +82,16 @@ class Ship(sprite.Sprite):
                 self.vy = -20
                 self.y -= 1
         else:
-            self.y += self.vy
-            self.vy += 1
-            if self.vy > 12:
-                self.vy = 12
+            w = self.thing_at(wall.Wall, 32-self.height, 32-self.height,
+                              64-self.height, 64-self.height)
+            if w:
+                self.y = w.y + 32
+                self.vy = 1
+            else:
+                self.y += self.vy
+                self.vy += 1
+                if self.vy > 12:
+                    self.vy = 12
 
         w = self.thing_at(spikes.Spike, 32, 32, 0, 0)
         if self.y > constants.HEIGHT*1.5 or w:
