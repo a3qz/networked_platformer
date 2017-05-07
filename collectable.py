@@ -16,6 +16,7 @@ import player
 class Collectable(sprite.Sprite):
     def __init__(self, game, x, y, descriptor):
         super(Collectable, self).__init__(game)
+        self.descriptor = descriptor
         self.rect.move_ip(x, y)
         self.xstart = x
         self.ystart = y
