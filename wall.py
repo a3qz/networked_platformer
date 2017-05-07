@@ -7,7 +7,7 @@ import fire
 import sprite
 
 class Terrain(sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, descriptor):
         super(Terrain, self).__init__(game)
         self.rect.move_ip(x, y)
         self.rect.inflate_ip(32, 32)
