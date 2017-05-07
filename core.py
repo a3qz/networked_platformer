@@ -105,6 +105,6 @@ class Game:
         self.connection.send(pack("BiiiiB", 2, n, 0, 0, 0, 0))
 
     def handle_win(self):
-        pass
+        self.connection.send(pack("BiiiiB", 3, n, 0, 0, 0, 0))
         #print "You win!!"
 

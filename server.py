@@ -3,6 +3,7 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 from twisted.internet.defer import DeferredQueue
+from threading import Timer
 from struct import *
 import sys, getopt
 import constants
@@ -83,6 +84,9 @@ class ClientConnection(Protocol):
             elif parsed[0] == 2: #a "i collected something" message
                 self.factory.collect(parsed[1]) #collect the card
                 self.factory.send(self, data)
+            elif parsed[0] == 3:
+                Timer(7.5, self.factory.reset).start()
+                self.factory.send(self, data)
             else: #otherwise forward it
                 self.factory.send(self, data)
 
@@ -131,5 +135,18 @@ class ClientConnectionFactory(ClientFactory):
                 if len(toSend) != 22:
                     print "3", len(toSend)
         
+    def sendall(self, data):
+        for c in self.cons:
+            if  c.transport:
+                #c.transport.write(pack("B", guy.uid) + data)
+                toSend = pack("B", 0) + data
+                c.transport.write(toSend)
+                if len(toSend) != 22:
+                    print "3", len(toSend)
+    def reset(self):
+        self.cards = set()
+        self.level = 3
+        data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
+        self.sendall(data)
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
