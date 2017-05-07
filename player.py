@@ -67,7 +67,7 @@ class Ship(sprite.Sprite):
         self.keys = 0
         self.img = pygame.image.load('imgs/cards/players/player.png').convert_alpha()
         self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/players/jumping.png').convert_alpha()
+        self.jumping = pygame.image.load('imgs/cards/final_jump/jack_of_hearts2.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
