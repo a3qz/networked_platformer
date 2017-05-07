@@ -16,5 +16,6 @@ class Spike(wall.Terrain):
                   (8, -16),
                   (16, 16)]
         pygame.draw.lines(self.game.screen, (120, 120, 120), True,
-                         [(self.x+x[0]-xx, self.y+x[1])for x in points], 1)
+                         [(self.rect.x+x[0]-xx, self.rect.y+x[1])
+                          for x in points], 1)
 

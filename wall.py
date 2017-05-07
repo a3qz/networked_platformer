@@ -9,8 +9,8 @@ import sprite
 class Terrain(sprite.Sprite):
     def __init__(self, game, x, y):
         super(Terrain, self).__init__(game)
-        self.y = y
-        self.x = x
+        self.rect.move_ip(x, y)
+        self.rect.inflate_ip(32, 32)
 
     def tick(self):
         return False
@@ -19,5 +19,5 @@ class Terrain(sprite.Sprite):
 class Wall(Terrain):
     def draw(self):
         pygame.draw.rect(self.game.screen, (120, 120, 120),
-                         (self.x - self.game.player.viewx1, self.y, 32, 32), 1)
+                         self.rect.move(-self.game.player.viewx1, 0), 1)
 
