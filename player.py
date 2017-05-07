@@ -81,6 +81,7 @@ class Ship(sprite.Sprite):
         self.dead_ticks = 0
 
     def gotoDead(self):
+        Death(self.game, self.img, self.rect.centerx, self.rect.centery)
         self.dead_ticks = constants.DEAD_TIME
 
     def tick(self):
@@ -172,3 +173,47 @@ class Ship(sprite.Sprite):
         self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
         self.normal = self.img
         self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+
+class Death(sprite.Sprite):
+    def __init__(self, game, img, x, y):
+        super(Death, self).__init__(game)
+        self.img1 = img
+        self.img2 = pygame.image.load('imgs/cards/backs/back.png').convert_alpha()
+        self.rect.move_ip(x - self.game.player.viewx1, y)
+        self.rect.inflate_ip(100, 145)
+        self.imgs  = img
+        self.state = 0
+        self.width = 100
+        self.timer = 10
+
+    def tick(self):
+        self.img = pygame.transform.scale(self.imgs, (self.width, 145))
+        if self.state == 0: #frozen
+            self.timer -= 1
+            if self.timer < 0:
+                self.timer = 10
+                self.state = 1
+        elif self.state == 1: #shrinking
+            if self.width > 1:  #we have room to shrink
+                self.width -= 7
+                if self.width < 0: self.width = 0
+            else:
+                self.imgs = self.img2 #do the flip
+                self.state = 2
+        elif self.state == 2: #growing
+            self.width += 7
+            if self.width >= 100:
+                self.state = 3
+        elif self.state == 3: #frozen again
+            self.timer -= 1
+            if self.timer < 0:
+                self.state = 4
+        elif self.state == 4: #fall
+            self.rect.move_ip(0, self.vy)
+            self.vy -= 1
+            if self.rect.y < -100:
+                return True #die
+
+    def draw(self):
+        #draw our sprite to the screen
+        self.game.screen.blit(self.img, self.rect.move((100-self.width)/2, 0))
