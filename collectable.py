@@ -73,7 +73,6 @@ class Collectable(sprite.Sprite):
         self.game.player.collect(str(self.descriptor))
         #and kill ourselves
         self.dead_ticks = constants.DEAD_TIME
-        self.game.collectCard(int(self.descriptor))
 
     def tick(self):
         if self.dead_ticks > 0:
@@ -94,6 +93,7 @@ class Collectable(sprite.Sprite):
             self.img = self.normal
         if w:
             if self.collectable_check(self.game.player.descriptor):
+                self.game.collectCard(int(self.descriptor))
                 self.gotoDead()
             else:
                 self.invalid_collect = constants.INVALID_COLLECT_TIMER

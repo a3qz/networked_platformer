@@ -170,7 +170,10 @@ class Ship(sprite.Sprite):
         self.firing = False
     
     def collect(self, descriptor):
-        self.descriptor = descriptor
+        if int((str(descriptor)[3:])) > int((str(self.descriptor)[3:])):
+            return
+        else:
+            self.descriptor = descriptor
         self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
         self.normal = self.img
         self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
