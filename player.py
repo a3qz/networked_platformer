@@ -15,7 +15,7 @@ class Shadow(sprite.Sprite):
     def __init__(self, game, uid):
         super(Shadow, self).__init__(game)
         self.num = random.randint(2,4)
-        self.img = pygame.image.load('imgs/cards/pngs/player{}.png'.format(str(self.num))).convert_alpha()
+        self.img = pygame.image.load('imgs/cards/players/player{}.png'.format(str(self.num))).convert_alpha()
 
         self.uid = uid
         self.height = 145
@@ -54,9 +54,9 @@ class Ship(sprite.Sprite):
         self.viewx2 = self.x+constants.WIDTH/2
         self.height = 145
         self.keys = 0
-        self.img = pygame.image.load('imgs/cards/pngs/player.png').convert_alpha()
+        self.img = pygame.image.load('imgs/cards/players/player.png').convert_alpha()
         self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/pngs/jumping.png').convert_alpha()
+        self.jumping = pygame.image.load('imgs/cards/players/jumping.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
