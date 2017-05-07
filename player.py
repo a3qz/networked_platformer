@@ -182,7 +182,6 @@ class Ship(sprite.Sprite):
         if int((str(descriptor)[3:])) > int((str(self.descriptor)[3:])):
             return
         else:
-            self.card_count += 1
             self.force_collect(descriptor)
 
 class Death(sprite.Sprite):

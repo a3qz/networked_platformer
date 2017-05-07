@@ -93,6 +93,7 @@ class Collectable(sprite.Sprite):
             self.img = self.normal
         if w:
             if self.collectable_check(self.game.player.descriptor):
+                self.game.player.card_count += 1
                 self.game.collectCard(int(self.descriptor))
                 self.gotoDead()
             else:
