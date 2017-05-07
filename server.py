@@ -84,7 +84,7 @@ class ClientConnection(Protocol):
                 self.factory.collect(parsed[1]) #collect the card
                 self.factory.send(self, data)
             elif parsed[0] == 3:
-                Timer(7.5, self.factory.reset).start()
+                self.factory.beginReset()
                 self.factory.send(self, data)
             else: #otherwise forward it
                 self.factory.send(self, data)
@@ -96,6 +96,7 @@ class ClientConnectionFactory(ClientFactory):
         self.count = 1
         self.cons = []
         self.addMore()
+        self.resetting = False
 
     def collect(self, n):
         self.cards.add(n)
@@ -142,8 +143,15 @@ class ClientConnectionFactory(ClientFactory):
                 c.transport.write(toSend)
                 if len(toSend) != 22:
                     print "3", len(toSend)
+
+    def beginReset(self):
+        if not self.resetting:
+            self.resetting = True
+            Timer(7.5, self.reset).start()
+
     def reset(self):
         print "RESET"
+        self.resetting = False
         self.cards = set()
         self.level = 3
         data = pack("BiiiiB", 1, MODE, self.level, 0, 0, 0)
