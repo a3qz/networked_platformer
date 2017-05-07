@@ -85,3 +85,4 @@ class Game:
 
     def connected(self, connection):
         self.connection = connection
+        self.connection.send(pack("BiiiiB", 1, 0, 0, 0, 0, 0))

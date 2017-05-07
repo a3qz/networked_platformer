@@ -26,9 +26,6 @@ elif len(sys.argv) == 2:
         print "default is versus mode"
         sys.exit(1)
 
-
-
-
 class ClientConnection(Protocol):
     def __init__(self, factory, uid):
         self.factory = factory
@@ -53,10 +50,18 @@ class ClientConnection(Protocol):
     def dataReceived(self, data):
         #self.transport.write(data)
         #self.q.put(data)
-        self.factory.send(self, data)
+        data = unpack("BiiiiB", data[1:22])
+        if data[0] == 1:
+            data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
+            self.transport.write(data) #if a client asked for something,
+            #just give it to them
+        else: #otherwise forward it
+            self.factory.send(self, data)
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
+        self.cards = []
+        self.level = 1
         self.count = 0
         self.cons = []
         self.addMore()
