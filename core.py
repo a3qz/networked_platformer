@@ -72,7 +72,7 @@ class Game:
                 self.level = data[2] #level number
                 self.board.parse("./levels/{}.lvl".format(self.level))
         elif data[0] == 2: #kill a card
-            for o in self.game.objects:
+            for o in self.objects:
                 if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
                     o.gotoDead()
 
@@ -97,5 +97,6 @@ class Game:
         self.connection.send(pack("BiiiiB", 2, n, 0, 0, 0, 0))
 
     def handle_win(self):
-        print "You win!!"
+        pass
+        #print "You win!!"
 
