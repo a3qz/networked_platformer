@@ -71,10 +71,9 @@ class Game:
                 self.level = data[2] #level number
                 self.board.parse("./levels/{}.lvl".format(self.level))
         elif data[0] == 2: #kill a card
-            self.game.objects = [o for o in self.game.objects 
-                if not isinstance(o, collectable.Collectable) or 
-                not o.descriptor == data[1]]
-
+            for o in self.game.objects:
+                if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
+                    o.gotoDead()
 
 
     def sendPlayer(self):

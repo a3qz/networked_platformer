@@ -28,6 +28,23 @@ class Collectable(sprite.Sprite):
         self.dead_ticks = 0
 
     def gotoDead(self):
+        #ok, so, we delimit suit and rank by... a 9...
+        ugh = str(self.descriptor)
+        #but it's always of the form 9S9R or 9S9RR
+        #where S is suit [1-4] and R/RR is rank [1-13]
+        #so, calculate our new stuff
+        newsuit = int(ugh[1])
+        if ugh[-2] == '9':
+            newrank = ugh[-1]
+        else:
+            newrank = ugh[-2:]
+        #then do the thing
+        newrank = str(int(newrank)-1) #why ryan why
+        #then do the thing
+        newcollect = '9' + newsuit + '9' + newrank
+        #then update the player sprite
+        self.game.player.collect(newcollect)
+        #and kill ourselves
         self.dead_ticks = constants.DEAD_TIME
 
     def tick(self):
