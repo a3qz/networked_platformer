@@ -57,6 +57,8 @@ class Game:
             uid = unpack("B", data[0])[0]
             data = unpack("BiiiiB", data[1:22])
             if data[0] == 0: #player update
+                if uid == 0: #server message
+                    continue #invalid message
                 for o in self.objects:
                     if isinstance(o, player.Shadow) and o.uid == uid:
                         o.rect.x  = data[1]
