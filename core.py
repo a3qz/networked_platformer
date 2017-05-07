@@ -3,6 +3,7 @@ import time
 import sys
 import player
 import constants
+import collectable
 import client
 from struct import *
 import board
