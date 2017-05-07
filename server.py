@@ -50,7 +50,7 @@ class ClientConnection(Protocol):
     def dataReceived(self, data):
         #self.transport.write(data)
         #self.q.put(data)
-        data = unpack("BiiiiB", data[1:22])
+        data = unpack("BiiiiB", data[0:21])
         if data[0] == 1:
             data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
             self.transport.write(data) #if a client asked for something,
