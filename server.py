@@ -64,24 +64,27 @@ class ClientConnection(Protocol):
         except Exception as E:
             print E
 
-    def dataReceived(self, data):
+    def dataReceived(self, d):
         #self.transport.write(data)
         #self.q.put(data)
-        parsed = unpack("BiiiiB", data[0:21])
-        if parsed[0] == 1: #a request for gamemode
-            data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
-            #if a client asked for something,
-            #just give it to them
-            toSend = pack("B", self.uid) + data
-            self.transport.write(toSend)
-            if len(toSend) != 22:
-                print len(toSend)
-            self.factory.sendCards(self)
-        elif parsed[0] == 2: #a "i collected something" message
-            self.factory.collect(parsed[1]) #collect the card
-            self.factory.send(self, data)
-        else: #otherwise forward it
-            self.factory.send(self, data)
+        print len(d)
+        for x in range(0, len(d), 21):
+            data = d[x:x+21]
+            parsed = unpack("BiiiiB", data[0:21])
+            if parsed[0] == 1: #a request for gamemode
+                data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
+                #if a client asked for something,
+                #just give it to them
+                toSend = pack("B", self.uid) + data
+                self.transport.write(toSend)
+                if len(toSend) != 22:
+                    print len(toSend)
+                self.factory.sendCards(self)
+            elif parsed[0] == 2: #a "i collected something" message
+                self.factory.collect(parsed[1]) #collect the card
+                self.factory.send(self, data)
+            else: #otherwise forward it
+                self.factory.send(self, data)
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
@@ -101,7 +104,7 @@ class ClientConnectionFactory(ClientFactory):
             toSend = pack("B", who.uid) + data
             who.transport.write(toSend)
             if len(toSend) != 22:
-                print len(toSend)
+                print "1", len(toSend)
 
     def buildProtocol(self, addr):
         return self.cons[-1]
@@ -113,20 +116,20 @@ class ClientConnectionFactory(ClientFactory):
     def sendMe(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid:
-                guy.transport.write(pack("B", c.uid) + data)
+                #guy.transport.write(pack("B", c.uid) + data)
                 toSend = pack("B", c.uid) + data
                 guy.transport.write(toSend)
                 if len(toSend) != 22:
-                    print len(toSend)
+                    print "2", len(toSend)
 
     def send(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid and c.transport:
-                c.transport.write(pack("B", guy.uid) + data)
+                #c.transport.write(pack("B", guy.uid) + data)
                 toSend = pack("B", guy.uid) + data
                 c.transport.write(toSend)
                 if len(toSend) != 22:
-                    print len(toSend)
+                    print "3", len(toSend)
         
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
