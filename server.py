@@ -101,7 +101,7 @@ class ClientConnectionFactory(ClientFactory):
             toSend = pack("B", who.uid) + data
             who.transport.write(toSend)
             if len(toSend) != 22:
-                print len(toSend)
+                print "1", len(toSend)
 
     def buildProtocol(self, addr):
         return self.cons[-1]
@@ -113,20 +113,20 @@ class ClientConnectionFactory(ClientFactory):
     def sendMe(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid:
-                guy.transport.write(pack("B", c.uid) + data)
+                #guy.transport.write(pack("B", c.uid) + data)
                 toSend = pack("B", c.uid) + data
                 guy.transport.write(toSend)
                 if len(toSend) != 22:
-                    print len(toSend)
+                    print "2", len(toSend)
 
     def send(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid and c.transport:
-                c.transport.write(pack("B", guy.uid) + data)
+                #c.transport.write(pack("B", guy.uid) + data)
                 toSend = pack("B", guy.uid) + data
                 c.transport.write(toSend)
                 if len(toSend) != 22:
-                    print len(toSend)
+                    print "3", len(toSend)
         
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
