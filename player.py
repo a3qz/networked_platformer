@@ -3,6 +3,7 @@ import pygame
 import time
 import sys
 import math
+import data
 import fire
 import sprite
 import constants
@@ -162,3 +163,8 @@ class Ship(sprite.Sprite):
 
     def handleMUP(self, xxt, yyt):
         self.firing = False
+    
+    def collect(self, descriptor):
+        self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+        self.normal = self.img
+        self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
