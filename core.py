@@ -16,6 +16,7 @@ class Game:
         self.connection = None
         self.level = 1
         self.t = 0
+        self.mode = 0
         client.DaFactory(self)
         self.board = board.Board(self)
         self.board.parse("./levels/3.lvl")
@@ -79,10 +80,12 @@ class Game:
             elif data[0] == 1: #gametype
                 self.mode = data[1] #VERSUS or COOPERATIVE
                 self.winning = False
+                self.player.force_collect("91913")
+                self.player.rect.x = self.player.xstart
+                self.player.rect.y = self.player.ystart
                 print data
-                if self.level != data[2]:
-                    self.level = data[2] #level number
-                    self.board.parse("./levels/{}.lvl".format(self.level))
+                self.level = data[2] #level number
+                self.board.parse("./levels/{}.lvl".format(self.level))
             elif data[0] == 2: #kill a card
                 for o in self.objects:
                     if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:

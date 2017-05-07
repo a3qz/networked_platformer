@@ -129,7 +129,8 @@ class Ship(sprite.Sprite):
         if self.rect.y > constants.HEIGHT*1.5 or w:
             self.gotoDead()
 
-        self.viewx1 = self.rect.x-constants.WIDTH/2
+        if not self.game.winning:
+            self.viewx1 = self.rect.x-constants.WIDTH/2
         if self.vy < 0:
             self.img = self.jumping
             fire.Fire(self.game, self.rect.centerx,
@@ -169,14 +170,17 @@ class Ship(sprite.Sprite):
     def handleMUP(self, xxt, yyt):
         self.firing = False
     
+    def force_collect(self, descriptor):
+        self.descriptor = descriptor
+        self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+        self.normal = self.img
+        self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+
     def collect(self, descriptor):
         if int((str(descriptor)[3:])) > int((str(self.descriptor)[3:])):
             return
         else:
-            self.descriptor = descriptor
-        self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
-        self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+            self.force_collect(descriptor)
 
 class Death(sprite.Sprite):
     def __init__(self, game, img, x, y):
