@@ -18,6 +18,6 @@ class Terrain(sprite.Sprite):
     
 class Wall(Terrain):
     def draw(self):
-        pygame.draw.rect(self.game.screen, (120, 120, 120),
+        pygame.draw.rect(self.game.screen, (255, 255, 255),
                          self.rect.move(-self.game.player.viewx1, 0), 1)
 
