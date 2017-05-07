@@ -67,6 +67,7 @@ class ClientConnection(Protocol):
     def dataReceived(self, d):
         #self.transport.write(data)
         #self.q.put(data)
+        print len(d)
         for x in range(0, len(d), 21):
             data = d[x:x+21]
             parsed = unpack("BiiiiB", data[0:21])
