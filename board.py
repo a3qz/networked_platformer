@@ -1,12 +1,4 @@
-import random
-import pygame
-import time
-import sys
-import math
-import bullet
 import spikes
-import fire
-import sprite
 import wall
 import constants
 

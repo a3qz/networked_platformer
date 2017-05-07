@@ -2,10 +2,6 @@ import random
 import time
 import sys
 import player
-import enemy
-import bullet
-import fire
-import wall
 import constants
 import client
 from struct import *
@@ -53,23 +49,35 @@ class Game:
     def handleData(self, data):
         uid = unpack("B", data[0])[0]
         data = unpack("BiiiiB", data[1:22])
-        for o in self.objects:
-            if isinstance(o, player.Shadow) and o.uid == uid:
-                o.rect.x  = data[1]
-                o.rect.y  = data[2]
-                o.vx = data[3]
-                o.vy = data[4]
-                return
-        o = player.Shadow(self, uid)
-        o.rect.x  = data[1]
-        o.rect.y  = data[2]
-        o.vx = data[3]
-        o.vy = data[4]
-        print "PLAYER {} JOINED!".format(uid)
+        if data[0] == 0: #player update
+            for o in self.objects:
+                if isinstance(o, player.Shadow) and o.uid == uid:
+                    o.rect.x  = data[1]
+                    o.rect.y  = data[2]
+                    o.vx = data[3]
+                    o.vy = data[4]
+                    return
+            o = player.Shadow(self, uid)
+            o.rect.x  = data[1]
+            o.rect.y  = data[2]
+            o.vx = data[3]
+            o.vy = data[4]
+            print "PLAYER {} JOINED!".format(uid)
+        elif data[0] == 1: #gametype
+            self.type = data[1] #VERSUS or COOPERATIVE
+            if self.level != data[2]:
+                self.level = data[2] #level number
+                self.board.parse("{}.lvl".format(self.level))
+        elif data[0] == 2: #kill a card
+            self.game.objects = [o for o in self.game.objects 
+                if not isinstance(o, collectable.Collectable) or 
+                not o.descriptor == data[1]]
+
+
 
     def sendPlayer(self):
         if not self.connection: return
-        self.connection.send(pack("BiiiiB", 1, self.player.rect.x,
+        self.connection.send(pack("BiiiiB", 0, self.player.rect.x,
                                                self.player.rect.y,
                                                self.player.vx,
                                                self.player.vy,

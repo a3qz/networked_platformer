@@ -3,7 +3,6 @@ import pygame
 import time
 import sys
 import math
-import bullet
 import fire
 import sprite
 import constants
