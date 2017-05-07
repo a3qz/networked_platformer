@@ -65,10 +65,11 @@ class Game:
             o.vy = data[4]
             print "PLAYER {} JOINED!".format(uid)
         elif data[0] == 1: #gametype
-            self.type = data[1] #VERSUS or COOPERATIVE
+            self.mode = data[1] #VERSUS or COOPERATIVE
+            print data
             if self.level != data[2]:
                 self.level = data[2] #level number
-                self.board.parse("{}.lvl".format(self.level))
+                self.board.parse("./levels/{}.lvl".format(self.level))
         elif data[0] == 2: #kill a card
             self.game.objects = [o for o in self.game.objects 
                 if not isinstance(o, collectable.Collectable) or 
