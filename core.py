@@ -52,6 +52,8 @@ class Game:
     def handleData(self, d):
         for x in range(0, len(d), 22):
             data = d[x:x+22]
+            if len(data) != 22:
+                return
             uid = unpack("B", data[0])[0]
             data = unpack("BiiiiB", data[1:22])
             if data[0] == 0: #player update
