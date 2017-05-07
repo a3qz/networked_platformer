@@ -4,8 +4,30 @@ from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 from twisted.internet.defer import DeferredQueue
 from struct import *
+import sys, getopt
+import constants
 
 CLIN_PORT = 40060
+
+MODE = constants.VERSUS
+
+if len(sys.argv) > 2:
+    print "Incorrect number of arguments"
+    sys.exit(1)
+elif len(sys.argv) == 2:
+    if sys.argv[1] == "-c":
+        MODE = constants.COOPERATIVE
+    elif sys.argv[1] == "-v":
+        MODE = constants.VERSUS
+    else:
+        print "Invalid flag.  Usage: ./server.py -[cv]"
+        print "    -v    versus mode"
+        print "    -c    cooperative mode"
+        print "default is versus mode"
+        sys.exit(1)
+
+
+
 
 class ClientConnection(Protocol):
     def __init__(self, factory, uid):
