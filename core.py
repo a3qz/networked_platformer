@@ -19,6 +19,7 @@ class Game:
         client.DaFactory(self)
         self.board = board.Board(self)
         self.board.parse("./levels/3.lvl")
+        self.winning = False
 
 
     def tick(self):
@@ -35,6 +36,8 @@ class Game:
             print E
 
     def draw(self):
+        if not self.winning:
+            self.screen.fill(constants.GREEN)
         for b in reversed(self.objects):
             b.draw()
 
@@ -75,6 +78,7 @@ class Game:
                 print "PLAYER {} JOINED!".format(uid)
             elif data[0] == 1: #gametype
                 self.mode = data[1] #VERSUS or COOPERATIVE
+                self.winning = False
                 print data
                 if self.level != data[2]:
                     self.level = data[2] #level number
@@ -105,6 +109,6 @@ class Game:
         self.connection.send(pack("BiiiiB", 2, n, 0, 0, 0, 0))
 
     def handle_win(self):
-        self.connection.send(pack("BiiiiB", 3, n, 0, 0, 0, 0))
-        #print "You win!!"
+        self.connection.send(pack("BiiiiB", 3, 0, 0, 0, 0, 0))
+        self.winning = True
 
