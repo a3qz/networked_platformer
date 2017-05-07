@@ -53,8 +53,9 @@ class ClientConnection(Protocol):
         parsed = unpack("BiiiiB", data[0:21])
         if parsed[0] == 1:
             data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
-            self.transport.write(data) #if a client asked for something,
+            #if a client asked for something,
             #just give it to them
+            self.transport.write(pack("B", self.uid) + data)
         else: #otherwise forward it
             self.factory.send(self, data)
 
