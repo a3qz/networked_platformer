@@ -15,6 +15,7 @@ import player
 class Collectable(sprite.Sprite):
     def __init__(self, game, x, y, descriptor):
         super(Collectable, self).__init__(game)
+        self.invalid_collect = 0
         self.descriptor = descriptor
         self.rect.move_ip(x, y)
         self.xstart = x
@@ -91,13 +92,28 @@ class Collectable(sprite.Sprite):
             self.thing_at(player.Shadow, 0, 0)) or (
             self.thing_at(player.Ship, 0, 0))
 
+        if self.invalid_collect > 1:
+            self.invalid_collect -= 1
+
+        if self.invalid_collect == 1:
+            self.invalid_collect = 0
+            self.img = self.normal
         if w:
             if self.collectable_check(self.game.player.descriptor):
                 self.gotoDead()
             else:
                 print '\a'
                 print 'cant collect'
+                self.invalid_collect = constants.INVALID_COLLECT_TIMER
+                n = pygame.Surface((100, 145), pygame.SRCALPHA, 32)
+                m = self.img.copy()
+                n.fill((127, 100, 100, 127))
+                n.set_alpha(127)
+                
+                m.blit(n, (0,0), special_flags=pygame.BLEND_RGB_MIN)
+                self.img = m
                 #eventually put bad animation here
+                self.game.screen.blit(m, self.rect.move(-self.game.player.viewx1, 0), special_flags=pygame.BLEND_ADD)
 
     def draw(self):
         self.game.screen.blit(self.img, self.rect.move(-self.game.player.viewx1, 0))
