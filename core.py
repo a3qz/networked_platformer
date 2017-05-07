@@ -55,14 +55,14 @@ class Game:
         data = unpack("BIIiiB", data[1:22])
         for o in self.objects:
             if isinstance(o, player.Shadow) and o.uid == uid:
-                o.x  = data[1]
-                o.y  = data[2]
+                o.rect.x  = data[1]
+                o.rect.y  = data[2]
                 o.vx = data[3]
                 o.vy = data[4]
                 return
         o = player.Shadow(self, uid)
-        o.x  = data[1]
-        o.y  = data[2]
+        o.rect.x  = data[1]
+        o.rect.y  = data[2]
         o.vx = data[3]
         o.vy = data[4]
         print "PLAYER {} JOINED!".format(uid)
