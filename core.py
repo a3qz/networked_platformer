@@ -83,6 +83,7 @@ class Game:
                 self.player.force_collect("91913")
                 self.player.rect.x = self.player.xstart
                 self.player.rect.y = self.player.ystart
+                self.player.card_count = 0
                 print data
                 self.level = data[2] #level number
                 self.board.parse("./levels/{}.lvl".format(self.level))

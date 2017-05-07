@@ -64,6 +64,7 @@ class Shadow(sprite.Sprite):
 class Ship(sprite.Sprite):
     def __init__(self, game, x, y, descriptor):
         super(Ship, self).__init__(game)
+        self.card_count = 0
         self.rect.move_ip(x, y)
         self.descriptor = descriptor
         self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
@@ -176,10 +177,12 @@ class Ship(sprite.Sprite):
         self.normal = self.img
         self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
 
+
     def collect(self, descriptor):
         if int((str(descriptor)[3:])) > int((str(self.descriptor)[3:])):
             return
         else:
+            self.card_count += 1
             self.force_collect(descriptor)
 
 class Death(sprite.Sprite):
