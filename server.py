@@ -68,7 +68,6 @@ class ClientConnection(Protocol):
     def dataReceived(self, d):
         #self.transport.write(data)
         #self.q.put(data)
-        print len(d)
         for x in range(0, len(d), 21):
             data = d[x:x+21]
             parsed = unpack("BiiiiB", data[0:21])
@@ -144,9 +143,10 @@ class ClientConnectionFactory(ClientFactory):
                 if len(toSend) != 22:
                     print "3", len(toSend)
     def reset(self):
+        print "RESET"
         self.cards = set()
         self.level = 3
-        data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
+        data = pack("BiiiiB", 1, MODE, self.level, 0, 0, 0)
         self.sendall(data)
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
