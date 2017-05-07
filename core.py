@@ -109,6 +109,7 @@ class Game:
         self.connection.send(pack("BiiiiB", 2, n, 0, 0, 0, 0))
 
     def handle_win(self):
-        self.connection.send(pack("BiiiiB", 3, 0, 0, 0, 0, 0))
+        if not self.winning:
+            self.connection.send(pack("BiiiiB", 3, 0, 0, 0, 0, 0))
         self.winning = True
 
