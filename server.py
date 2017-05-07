@@ -51,11 +51,15 @@ class ClientConnection(Protocol):
         #self.transport.write(data)
         #self.q.put(data)
         parsed = unpack("BiiiiB", data[0:21])
-        if parsed[0] == 1:
+        if parsed[0] == 1: #a request for gamemode
             data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
             #if a client asked for something,
             #just give it to them
             self.transport.write(pack("B", self.uid) + data)
+            self.factory.sendCards(self)
+        elif parsed[0] == 2: #a "i collected something" message
+            self.factory.collect(parsed[1]) #collect the card
+            self.factory.send(self, data)
         else: #otherwise forward it
             self.factory.send(self, data)
 
@@ -66,6 +70,14 @@ class ClientConnectionFactory(ClientFactory):
         self.count = 0
         self.cons = []
         self.addMore()
+
+    def collect(self, n):
+        self.cards.append(n)
+
+    def sendCards(self, who):
+        for n in self.cards:
+            data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
+            who.transport.write(pack("B", -1) + data)
 
     def buildProtocol(self, addr):
         return self.cons[-1]

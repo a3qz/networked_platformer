@@ -93,6 +93,8 @@ class Game:
         if str(self.player.descriptor)[3:] == "1":
             self.handle_win()
 
+    def collectCard(self, n):
+        self.connection.send(pack("BiiiiB", 2, n, 0, 0, 0, 0))
 
     def handle_win(self):
         print "You win!!"

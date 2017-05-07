@@ -53,11 +53,6 @@ class Collectable(sprite.Sprite):
             return new_desc[2:] == newcollect[2:]
         return False
             
-
-
-
-
-
     def gotoDead(self):
         #ok, so, we delimit suit and rank by... a 9...
         ugh = str(self.descriptor)
@@ -78,6 +73,7 @@ class Collectable(sprite.Sprite):
         self.game.player.collect(str(self.descriptor))
         #and kill ourselves
         self.dead_ticks = constants.DEAD_TIME
+        self.game.collectCard(int(self.descriptor))
 
     def tick(self):
         if self.dead_ticks > 0:
