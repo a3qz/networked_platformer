@@ -82,14 +82,14 @@ class ClientConnection(Protocol):
 
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
-        self.cards = []
+        self.cards = set()
         self.level = 3
         self.count = 0
         self.cons = []
         self.addMore()
 
     def collect(self, n):
-        self.cards.append(n)
+        self.cards.add(n)
 
     def sendCards(self, who):
         for n in self.cards:

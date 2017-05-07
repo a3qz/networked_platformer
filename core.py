@@ -49,33 +49,35 @@ class Game:
     def handleMDOWN(self, xxt, yyt):
         self.player.handleMDOWN(xxt, yyt)
  
-    def handleData(self, data):
-        uid = unpack("B", data[0])[0]
-        data = unpack("BiiiiB", data[1:22])
-        if data[0] == 0: #player update
-            for o in self.objects:
-                if isinstance(o, player.Shadow) and o.uid == uid:
-                    o.rect.x  = data[1]
-                    o.rect.y  = data[2]
-                    o.vx = data[3]
-                    o.vy = data[4]
-                    return
-            o = player.Shadow(self, uid)
-            o.rect.x  = data[1]
-            o.rect.y  = data[2]
-            o.vx = data[3]
-            o.vy = data[4]
-            print "PLAYER {} JOINED!".format(uid)
-        elif data[0] == 1: #gametype
-            self.mode = data[1] #VERSUS or COOPERATIVE
-            print data
-            if self.level != data[2]:
-                self.level = data[2] #level number
-                self.board.parse("./levels/{}.lvl".format(self.level))
-        elif data[0] == 2: #kill a card
-            for o in self.objects:
-                if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
-                    o.gotoDead()
+    def handleData(self, d):
+        for x in range(0, len(d), 22):
+            data = d[x:x+22]
+            uid = unpack("B", data[0])[0]
+            data = unpack("BiiiiB", data[1:22])
+            if data[0] == 0: #player update
+                for o in self.objects:
+                    if isinstance(o, player.Shadow) and o.uid == uid:
+                        o.rect.x  = data[1]
+                        o.rect.y  = data[2]
+                        o.vx = data[3]
+                        o.vy = data[4]
+                        return
+                o = player.Shadow(self, uid)
+                o.rect.x  = data[1]
+                o.rect.y  = data[2]
+                o.vx = data[3]
+                o.vy = data[4]
+                print "PLAYER {} JOINED!".format(uid)
+            elif data[0] == 1: #gametype
+                self.mode = data[1] #VERSUS or COOPERATIVE
+                print data
+                if self.level != data[2]:
+                    self.level = data[2] #level number
+                    self.board.parse("./levels/{}.lvl".format(self.level))
+            elif data[0] == 2: #kill a card
+                for o in self.objects:
+                    if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
+                        o.gotoDead()
 
 
     def sendPlayer(self):
