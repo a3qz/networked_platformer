@@ -62,17 +62,21 @@ class Shadow(sprite.Sprite):
             self.img = self.normal
 
 class Ship(sprite.Sprite):
-    def __init__(self, game, x, y):
+    def __init__(self, game, x, y, descriptor):
         super(Ship, self).__init__(game)
         self.rect.move_ip(x, y)
+        self.descriptor = descriptor
+        self.img = pygame.image.load('imgs/cards/smaller_pngs/{}'.format(data.num_as_key[descriptor])).convert_alpha()
+        self.normal = self.img
+        self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
         self.xstart = x
         self.ystart = y
         self.viewx1 = x-constants.WIDTH/2
         self.rect.inflate_ip(100, 145)
         self.keys = 0
-        self.img = pygame.image.load('imgs/cards/players/player.png').convert_alpha()
-        self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/final_jump/jack_of_hearts2.png').convert_alpha()
+        #self.img = pygame.image.load('imgs/cards/players/player.png').convert_alpha()
+        #self.normal = self.img
+        #self.jumping = pygame.image.load('imgs/cards/final_jump/jack_of_hearts2.png').convert_alpha()
         self.firing = False
         self.dead_ticks = 0
 
