@@ -52,7 +52,7 @@ class Game:
  
     def handleData(self, data):
         uid = unpack("B", data[0])[0]
-        data = unpack("BIIiiB", data[1:22])
+        data = unpack("BiiiiB", data[1:22])
         for o in self.objects:
             if isinstance(o, player.Shadow) and o.uid == uid:
                 o.rect.x  = data[1]
@@ -69,7 +69,7 @@ class Game:
 
     def sendPlayer(self):
         if not self.connection: return
-        self.connection.send(pack("BIIiiB", 1, self.player.rect.x,
+        self.connection.send(pack("BiiiiB", 1, self.player.rect.x,
                                                self.player.rect.y,
                                                self.player.vx,
                                                self.player.vy,
