@@ -66,7 +66,7 @@ class ClientConnection(Protocol):
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
         self.cards = []
-        self.level = 2
+        self.level = 3
         self.count = 0
         self.cons = []
         self.addMore()
