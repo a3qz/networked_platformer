@@ -18,10 +18,11 @@ class Shadow(sprite.Sprite):
         self.img = pygame.image.load('imgs/cards/players/player{}.png'.format(str(self.num))).convert_alpha()
 
         self.uid = uid
-        self.rect.inflate(100, 145)
+        self.rect.inflate_ip(100, 145)
 
     def draw(self):
-        self.game.screen.blit(self.img, self.rect)
+        self.game.screen.blit(self.img,
+                              self.rect.move(-self.game.player.viewx1, 0))
 
     def tick(self):
         w = self.thing_at(wall.Wall, self.vx, 0) or (
