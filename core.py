@@ -13,6 +13,7 @@ class Game:
         self.screen = s
         self.player = player.Ship(self, 100, 100)
         self.connection = None
+        self.level = 1
         self.t = 0
         client.DaFactory(self)
         self.board = board.Board(self)
