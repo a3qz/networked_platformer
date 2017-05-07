@@ -69,8 +69,8 @@ class Game:
 
     def sendPlayer(self):
         if not self.connection: return
-        self.connection.send(pack("BIIiiB", 1, self.player.x,
-                                               self.player.y,
+        self.connection.send(pack("BIIiiB", 1, self.player.rect.x,
+                                               self.player.rect.y,
                                                self.player.vx,
                                                self.player.vy,
                                                0))
