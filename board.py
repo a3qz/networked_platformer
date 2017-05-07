@@ -23,7 +23,7 @@ class Board:
     def parse(self, name):
         #first delete all spike and wall objects
         self.game.objects = [o for o in self.game.objects 
-                             if (not isinstance(o, wall.Terrain)) or
+                             if (not isinstance(o, wall.Terrain)) and
                                 (not isinstance(o, collectable.Collectable))]
         with open(name) as f:
             for l in f:
