@@ -72,7 +72,10 @@ class ClientConnection(Protocol):
             data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
             #if a client asked for something,
             #just give it to them
-            self.transport.write(pack("B", self.uid) + data)
+            toSend = pack("B", self.uid) + data
+            self.transport.write(toSend)
+            if len(toSend) != 22:
+                print len(toSend)
             self.factory.sendCards(self)
         elif parsed[0] == 2: #a "i collected something" message
             self.factory.collect(parsed[1]) #collect the card
@@ -94,7 +97,11 @@ class ClientConnectionFactory(ClientFactory):
     def sendCards(self, who):
         for n in sorted(list(self.cards)):
             data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
-            who.transport.write(pack("B", who.uid) + data)
+            #who.transport.write(pack("B", who.uid) + data)
+            toSend = pack("B", who.uid) + data
+            who.transport.write(toSend)
+            if len(toSend) != 22:
+                print len(toSend)
 
     def buildProtocol(self, addr):
         return self.cons[-1]
@@ -107,11 +114,19 @@ class ClientConnectionFactory(ClientFactory):
         for c in self.cons:
             if c.uid != guy.uid:
                 guy.transport.write(pack("B", c.uid) + data)
+                toSend = pack("B", c.uid) + data
+                guy.transport.write(toSend)
+                if len(toSend) != 22:
+                    print len(toSend)
 
     def send(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid and c.transport:
                 c.transport.write(pack("B", guy.uid) + data)
+                toSend = pack("B", guy.uid) + data
+                c.transport.write(toSend)
+                if len(toSend) != 22:
+                    print len(toSend)
         
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
