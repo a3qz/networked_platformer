@@ -33,7 +33,6 @@ class Collectable(sprite.Sprite):
     def tick(self):
         if self.dead_ticks > 0:
             #self.dead_ticks -= 1
-            print self.dead_ticks
             self.rect.x = 300
             self.rect.y = 4444
             #if self.dead_ticks == 0:

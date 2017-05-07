@@ -15,9 +15,9 @@ class Shadow(sprite.Sprite):
     def __init__(self, game, uid):
         super(Shadow, self).__init__(game)
         self.num = random.randint(2,4)
-        self.img = pygame.image.load('imgs/cards/smaller_pngs/jack_of_spades2.png').convert_alpha()
+        self.img = pygame.image.load('imgs/cards/smaller_pngs/black_joker.png').convert_alpha()
         self.normal = self.img
-        self.jumping = pygame.image.load('imgs/cards/final_jump/jack_of_spades2.png').convert_alpha()
+        self.jumping = pygame.image.load('imgs/cards/final_jump/black_joker.png').convert_alpha()
 
         self.uid = uid
         self.rect.inflate_ip(100, 145)
