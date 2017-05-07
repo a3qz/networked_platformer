@@ -30,7 +30,7 @@ def go():
                 game.handleKeyDown(k)
                 if "q" in k:
                     sys.exit()
-        screen.fill(constants.BLACK)
+        screen.fill(constants.GREEN)
         game.tick()
         game.draw()
         pygame.display.flip()
