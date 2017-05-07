@@ -1,4 +1,5 @@
 import random
+import pygame
 import time
 import sys
 import player
@@ -21,6 +22,7 @@ class Game:
         self.board = board.Board(self)
         self.board.parse("./levels/3.lvl")
         self.winning = False
+        self.font = pygame.font.Font("./fonts/megaman_2.ttf", 16)
 
 
     def tick(self):
@@ -41,6 +43,9 @@ class Game:
             self.screen.fill(constants.GREEN)
         for b in reversed(self.objects):
             b.draw()
+        if self.mode == constants.VERSUS:
+            label = self.font.render("SCORE: "+str(self.player.card_count), 1, (255, 255, 255))
+            self.screen.blit(label, (25, 25))
 
     def handleKeyDown(self, k):
         self.player.handleKeyDown(k)
