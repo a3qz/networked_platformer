@@ -84,9 +84,8 @@ class Collectable(sprite.Sprite):
                 #self.rect.x = self.xstart
                 #self.rect.y = self.ystart
             return False
-        w = (
-            self.thing_at(player.Shadow, 0, 0)) or (
-            self.thing_at(player.Ship, 0, 0))
+        w = (self.thing_at(player.Ship, 0, 0))
+            #self.thing_at(player.Shadow, 0, 0)) or (
 
         if self.invalid_collect > 1:
             self.invalid_collect -= 1
