@@ -92,7 +92,7 @@ class ClientConnectionFactory(ClientFactory):
         self.cards.add(n)
 
     def sendCards(self, who):
-        for n in self.cards:
+        for n in sorted(list(self.cards)):
             data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
             who.transport.write(pack("B", who.uid) + data)
 
