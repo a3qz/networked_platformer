@@ -11,7 +11,7 @@ class Game:
     def __init__(self, s):
         self.objects = []
         self.screen = s
-        self.player = player.Ship(self, 100, 100)
+        self.player = player.Ship(self, 100, 100, "93913")
         self.connection = None
         self.level = 1
         self.t = 0

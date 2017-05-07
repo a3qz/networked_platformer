@@ -33,7 +33,7 @@ class Collectable(sprite.Sprite):
         #but it's always of the form 9S9R or 9S9RR
         #where S is suit [1-4] and R/RR is rank [1-13]
         #so, calculate our new stuff
-        newsuit = int(ugh[1])
+        newsuit = ugh[1]
         if ugh[-2] == '9':
             newrank = ugh[-1]
         else:
