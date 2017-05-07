@@ -52,6 +52,9 @@ class Game:
             self.screen.fill(constants.RED)
             label = self.bigfont.render("You Lose", 1, (255, 255, 255))
             self.screen.blit(label, (constants.WIDTH/2-125, 300))
+        if self.winning and not self.losing == 1:
+            label = self.bigfont.render("You Win!!", 1, (255, 255, 255))
+            self.screen.blit(label, (constants.WIDTH/2-125, 200))
 
 
     def handleKeyDown(self, k):
@@ -105,9 +108,10 @@ class Game:
                     if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
                         o.gotoDead()
             elif data[0] == 3:
-                if data[1] > self.player.card_count:
-                    self.winning = False
-                    self.losing = 1
+                if self.mode == constants.VERSUS:
+                    if data[1] > self.player.card_count:
+                        self.winning = False
+                        self.losing = 1
 
 
     def sendPlayer(self):
