@@ -14,7 +14,9 @@ class Shadow(sprite.Sprite):
     def __init__(self, game, uid):
         super(Shadow, self).__init__(game)
         self.num = random.randint(2,4)
-        self.img = pygame.image.load('imgs/cards/players/player{}.png'.format(str(self.num))).convert_alpha()
+        self.img = pygame.image.load('imgs/cards/smaller_pngs/black_joker.png').convert_alpha()
+        self.normal = self.img
+        self.jumping = pygame.image.load('imgs/cards/final_jump/black_joker.png').convert_alpha()
 
         self.uid = uid
         self.rect.inflate_ip(100, 145)
@@ -52,8 +54,11 @@ class Shadow(sprite.Sprite):
                 self.vy = 12
 
         if self.vy < 0:
+            self.img = self.jumping
             fire.Fire(self.game, self.rect.centerx,
                                  self.rect.centery, -self.vx, -self.vy)
+        else:
+            self.img = self.normal
 
 class Ship(sprite.Sprite):
     def __init__(self, game, x, y):
