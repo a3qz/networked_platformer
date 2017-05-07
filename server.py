@@ -94,7 +94,7 @@ class ClientConnectionFactory(ClientFactory):
     def sendCards(self, who):
         for n in self.cards:
             data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
-            who.transport.write(pack("B", -1) + data)
+            who.transport.write(pack("B", who.uid) + data)
 
     def buildProtocol(self, addr):
         return self.cons[-1]
