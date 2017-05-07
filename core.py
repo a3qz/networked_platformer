@@ -11,16 +11,17 @@ class Game:
     def __init__(self, s):
         self.objects = []
         self.screen = s
-        self.player = player.Ship(self, 100, 100, "93913")
+        self.player = player.Ship(self, 100, 100, "91913")
         self.connection = None
         self.level = 1
         self.t = 0
         client.DaFactory(self)
         self.board = board.Board(self)
-        self.board.parse("./levels/1.lvl")
+        self.board.parse("./levels/3.lvl")
 
 
     def tick(self):
+        self.did_game_end()
         try:
             for b in self.objects:
                 if b.tick():
@@ -87,3 +88,12 @@ class Game:
     def connected(self, connection):
         self.connection = connection
         self.connection.send(pack("BiiiiB", 1, 0, 0, 0, 0, 0))
+
+    def did_game_end(self):
+        if str(self.player.descriptor)[3:] == "1":
+            self.handle_win()
+
+
+    def handle_win(self):
+        print "You win!!"
+

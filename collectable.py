@@ -50,7 +50,6 @@ class Collectable(sprite.Sprite):
             suitlooking = 'b'
 
         if (suitlooking == 'b' and (newcollect[1] == '1' or newcollect[1] == '4')) or (suitlooking == 'r' and (newcollect[1] == '2' or newcollect[1] == '3')):
-            print 'ere'
             return new_desc[2:] == newcollect[2:]
         return False
             
@@ -75,7 +74,8 @@ class Collectable(sprite.Sprite):
         #then do the thing
         newcollect = '9' + newsuit + '9' + newrank
         #then update the player sprite
-        self.game.player.collect(newcollect)
+        #self.game.player.collect(newcollect)
+        self.game.player.collect(str(self.descriptor))
         #and kill ourselves
         self.dead_ticks = constants.DEAD_TIME
 
@@ -94,16 +94,13 @@ class Collectable(sprite.Sprite):
 
         if self.invalid_collect > 1:
             self.invalid_collect -= 1
-
-        if self.invalid_collect == 1:
+        elif self.invalid_collect == 1:
             self.invalid_collect = 0
             self.img = self.normal
         if w:
             if self.collectable_check(self.game.player.descriptor):
                 self.gotoDead()
             else:
-                print '\a'
-                print 'cant collect'
                 self.invalid_collect = constants.INVALID_COLLECT_TIMER
                 n = pygame.Surface((100, 145), pygame.SRCALPHA, 32)
                 m = self.img.copy()
@@ -112,7 +109,6 @@ class Collectable(sprite.Sprite):
                 
                 m.blit(n, (0,0), special_flags=pygame.BLEND_RGB_MIN)
                 self.img = m
-                #eventually put bad animation here
                 self.game.screen.blit(m, self.rect.move(-self.game.player.viewx1, 0), special_flags=pygame.BLEND_ADD)
 
     def draw(self):

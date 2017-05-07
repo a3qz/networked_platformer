@@ -36,7 +36,7 @@ def go():
         pygame.display.flip()
         clock.tick(constants.FPS)
     except Exception as E:
-        print E
+        print "here " + str(E)
 lc = LoopingCall(go)
 lc.start(0.001)
 reactor.run()
