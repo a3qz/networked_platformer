@@ -16,6 +16,10 @@ class Terrain(sprite.Sprite):
 
     
 class Wall(Terrain):
+    def __init__(self, game, x, y, descriptor):
+        super(Wall, self).__init__(game, x, y, descriptor)
+        self.descriptor = "0"
+
     def draw(self):
         pygame.draw.rect(self.game.screen, (255, 255, 255),
                          self.rect.move(*self.game.player.view), 1)
