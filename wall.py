@@ -3,7 +3,6 @@ import pygame
 import time
 import sys
 import math
-import fire
 import sprite
 
 class Terrain(sprite.Sprite):
@@ -19,5 +18,5 @@ class Terrain(sprite.Sprite):
 class Wall(Terrain):
     def draw(self):
         pygame.draw.rect(self.game.screen, (255, 255, 255),
-                         self.rect.move(-self.game.player.viewx1, 0), 1)
+                         self.rect.move(*self.game.player.view), 1)
 

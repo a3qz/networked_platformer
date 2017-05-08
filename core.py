@@ -41,6 +41,12 @@ class Game:
             print E
 
     def draw(self):
+        if not self.connection:
+            self.screen.fill(constants.GRAY)
+            label = self.bigfont.render("JOINING GAME", 1, (255, 255, 255))
+            self.screen.blit(label, (constants.WIDTH/2-170, 300))
+            return
+
         if not self.winning or not self.losing == 2:
             self.screen.fill(constants.GREEN)
         for b in reversed(self.objects):

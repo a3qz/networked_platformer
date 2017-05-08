@@ -3,7 +3,6 @@ import pygame
 import time
 import sys
 import math
-import fire
 import sprite
 import constants
 import wall
@@ -105,8 +104,8 @@ class Collectable(sprite.Sprite):
                 
                 m.blit(n, (0,0), special_flags=pygame.BLEND_RGB_MIN)
                 self.img = m
-                self.game.screen.blit(m, self.rect.move(-self.game.player.viewx1, 0), special_flags=pygame.BLEND_ADD)
+                self.game.screen.blit(m, self.rect.move(*self.game.player.view), special_flags=pygame.BLEND_ADD)
 
     def draw(self):
-        self.game.screen.blit(self.img, self.rect.move(-self.game.player.viewx1, 0))
+        self.game.screen.blit(self.img, self.rect.move(*self.game.player.view))
         

@@ -4,7 +4,6 @@ import time
 import sys
 import math
 import data
-import fire
 import sprite
 import constants
 import wall
@@ -24,7 +23,7 @@ class Shadow(sprite.Sprite):
 
     def draw(self):
         self.game.screen.blit(self.img,
-                              self.rect.move(-self.game.player.viewx1, 0))
+                              self.rect.move(*self.game.player.view))
 
     def tick(self):
         w = self.thing_at(wall.Wall, self.vx, 0) or (
@@ -56,8 +55,6 @@ class Shadow(sprite.Sprite):
 
         if self.vy < 0:
             self.img = self.jumping
-            fire.Fire(self.game, self.rect.centerx,
-                                 self.rect.centery, -self.vx, -self.vy)
         else:
             self.img = self.normal
 
@@ -72,7 +69,7 @@ class Ship(sprite.Sprite):
         self.jumping = pygame.image.load('imgs/cards/final_jump/{}'.format(data.num_as_key[descriptor])).convert_alpha()
         self.xstart = x
         self.ystart = y
-        self.viewx1 = x-constants.WIDTH/2
+        self.view = (0, 0)
         self.rect.inflate_ip(100, 145)
         self.keys = 0
         #self.img = pygame.image.load('imgs/cards/players/player.png').convert_alpha()
@@ -113,7 +110,14 @@ class Ship(sprite.Sprite):
         if w:
             if self.vy > 0:
                 self.rect.bottom = w.rect.top
-                self.vy = 0
+                if self.game.winning:
+                    print self.vy
+                    if self.vy <= 5:
+                        self.vy = 0
+                    else:
+                        self.vy = -(self.vy*5)/8
+                else:
+                    self.vy = 0
                 if ((self.keys & 4)>>2) > 0:
                     self.vy = -20
                     self.rect.y -= 1
@@ -123,24 +127,23 @@ class Ship(sprite.Sprite):
         else:
             self.rect.y += self.vy
             self.vy += 1
-            if self.vy > 12:
-                self.vy = 12
+            if self.vy > 16:
+                self.vy = 16
 
         w = self.thing_at(spikes.Spike, 0, 1)
         if self.rect.y > constants.HEIGHT*1.5 or w:
             self.gotoDead()
 
         if not self.game.winning:
-            self.viewx1 = self.rect.x-constants.WIDTH/2
+            self.view = (constants.WIDTH/2 - self.rect.x - self.rect.w/2,
+                         (constants.HEIGHT*5)/8 - self.rect.y - self.rect.h/2)
         if self.vy < 0:
             self.img = self.jumping
-            fire.Fire(self.game, self.rect.centerx,
-                                 self.rect.centery, -self.vx, -self.vy)
         else:
             self.img = self.normal
 
     def draw(self):
-        self.game.screen.blit(self.img, self.rect.move(-self.viewx1, 0))
+        self.game.screen.blit(self.img, self.rect.move(*self.view))
         
     def handleKeyDown(self, k):
         if k == 'a':
@@ -189,7 +192,8 @@ class Death(sprite.Sprite):
         super(Death, self).__init__(game)
         self.img1 = img
         self.img2 = pygame.image.load('imgs/cards/backs/back.png').convert_alpha()
-        self.rect.move_ip(x - self.game.player.viewx1, y)
+        self.rect.move_ip(x, y)
+        self.rect.move_ip(*self.game.player.view)
         self.rect.inflate_ip(100, 145)
         self.imgs  = img
         self.state = 0
