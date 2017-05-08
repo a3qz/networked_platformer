@@ -16,6 +16,7 @@ class Game:
         self.screen = s
         self.player = player.Ship(self, 100, 100, "91913")
         self.connection = None
+        self.deathzone = 5000
         self.level = 1
         self.t = 0
         self.mode = 0

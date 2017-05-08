@@ -131,7 +131,7 @@ class Ship(sprite.Sprite):
                 self.vy = 16
 
         w = self.thing_at(spikes.Spike, 0, 1)
-        if self.rect.y > constants.HEIGHT*1.5 or w:
+        if self.rect.y > self.game.deathzone or w:
             self.gotoDead()
 
         if not self.game.winning:

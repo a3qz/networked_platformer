@@ -29,3 +29,14 @@ class Board:
             for l in f:
                 d = [int(x) for x in l.split()]
                 self.ref[d[0]](self.game, d[1], d[2], d[0])
+        self.game.deathzone = max([o.rect.y
+                                   for o in self.game.objects
+                                   if isinstance(o, wall.Wall)]) + 200
+    def save(self, name):
+        #first delete all spike and wall objects
+        d = ['{} {} {}\n'.format(o.descriptor, o.rect.centerx, o.rect.centery)
+             for o in self.game.objects 
+             if (isinstance(o, wall.Terrain)) or
+                (isinstance(o, collectable.Collectable))]
+        with open(name, 'w') as f:
+            f.writelines(d)
