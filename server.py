@@ -92,7 +92,7 @@ class ClientConnection(Protocol):
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
         self.cards = set()
-        self.level = 3
+        self.level = int(LEVEL)
         self.count = 1
         self.cons = []
         self.addMore()
