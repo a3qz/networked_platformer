@@ -105,60 +105,78 @@ class Ship(sprite.Sprite):
                 self.rect.y = self.ystart
             return False
 
+        #handle horizontal motion buttons
         self.fly()
 
+        #check if we're about to move into a wall or player
         w = self.thing_at(wall.Wall, self.vx, 0) or (
             self.thing_at(Shadow, self.vx, 0))
-        if w:
+        if w: #if so, move us into them and stop
             if w.rect.x > self.rect.x:
                 self.rect.right = w.rect.left
             else:
                 self.rect.left = w.rect.right
             self.vx = 0
-        else:
+        else: #if not, do the horizontal movement
             self.rect.x += self.vx
 
+        #check if we're about to move vertically into a wall or player
         w = self.thing_at(wall.Wall, 0, self.vy) or (
             self.thing_at(Shadow, 0, self.vy))
-        if w:
+        if w: #if so, move into it
             if self.vy > 0:
+                #if we're falling, align with its top and stop falling
                 self.rect.bottom = w.rect.top
+                #if we're in the win state, we bounce!
                 if self.game.winning:
-                    print self.vy
+                    #stop bouncing after a while
                     if self.vy <= 5:
                         self.vy = 0
-                    else:
+                    else: #bounce!
                         self.vy = -(self.vy*5)/8
                 else:
+                    #otherwise, when we hit the ground we stop
                     self.vy = 0
+                #while on the ground we can jump, so handle that
                 if ((self.keys & 4)>>2) > 0:
                     self.vy = -20
                     self.rect.y -= 1
             else:
+                #if we move upward into something, stop and fall back down
                 self.rect.top = w.rect.bottom
                 self.vy = 1
         else:
+            #if we won't hit anything, move vertically
             self.rect.y += self.vy
+            #and let gravity do its thing
             self.vy += 1
+            #but don't go tooo fast
             if self.vy > 16:
                 self.vy = 16
 
+        #check if we're coliding with spikes
         w = self.thing_at(spikes.Spike, 0, 1)
         if self.rect.y > self.game.deathzone or w:
             self.gotoDead()
 
+        #move our viewport if we aren't in the win state
         if not self.game.winning:
             self.view = (constants.WIDTH/2 - self.rect.x - self.rect.w/2,
                          (constants.HEIGHT*5)/8 - self.rect.y - self.rect.h/2)
+
+        #set our sprite to either the jumping one or the normal one
         if self.vy < 0:
             self.img = self.jumping
         else:
             self.img = self.normal
 
     def draw(self):
+        #draw ourselves
         self.game.screen.blit(self.img, self.rect.move(*self.view))
         
+
     def handleKeyDown(self, k):
+        #set our key variable based off what we're pressing
         if k == 'a':
             self.keys |= 1
         elif k == 'd':
@@ -169,6 +187,7 @@ class Ship(sprite.Sprite):
             self.keys |= 8
 
     def handleKeyUp(self, k):
+        #set our key variable based off what we're releasing
         if k == 'a':
             self.keys &= ~1
         elif k == 'd':
@@ -178,7 +197,8 @@ class Ship(sprite.Sprite):
         elif k == 's':
             self.keys &= ~8
 
-    # handle jumping
+    # handle walking (it was called fly because of the deathstar thing
+    # and we didn't rename it)
     def fly(self):
         self.vx = (((self.keys & 2)>>1) - ((self.keys & 1)>>0)) * 7
 
