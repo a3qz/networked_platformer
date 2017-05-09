@@ -133,7 +133,8 @@ class Game:
             # if it is a card removal
             elif data[0] == 2: #kill a card
                 for o in self.objects:
-                    if isinstance(o, collectable.Collectable) and o.descriptor == data[1]:
+                    if isinstance(o, collectable.Collectable) and \
+                       str(o.descriptor) == str(data[1]):
                         o.gotoDead()
             # if it is a win message
             elif data[0] == 3:
