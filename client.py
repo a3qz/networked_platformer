@@ -1,40 +1,39 @@
 #!/usr/bin/python2
+
+#our client networking stuff is in here - it just handles recieving
+#information - all of the stuff is really handled in core
+
 from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
-#from twisted.internet.task import LoopingCall
-from twisted.internet.defer import DeferredQueue
 
 HOME_HOST = "ash.campus.nd.edu"
 HOME_PORT = 40060
 
 class DaBears(Protocol):
     def __init__(self, game):
+        #set our game state when we are initialized
         self.game = game
-        self.q = DeferredQueue()
 
     def connectionMade(self):
-        self.startForwarding() 
+        #when we are connected, tell our game state about it
         self.game.connected(self)
 
-    def startForwarding(self):
-        self.q.get().addCallback(self.wordForward)
-
-    def wordForward(self, data):
-        self.transport.write(data)
-        self.q.get().addCallback(self.wordForward)
-
     def dataReceived(self, data):
+        #have our game state handle any recieved data
         self.game.handleData(data)
 
     def send(self, data):
+        #simply send data
         self.transport.write(data)
-        #self.q.put(data)
 
 class DaFactory(ClientFactory):
     def __init__(self, game):
+        #make a connection to the server
         self.myconn = DaBears(game)
         reactor.connectTCP(HOME_HOST, HOME_PORT, self)
 
     def buildProtocol(self, addr):
         return self.myconn
+
+#note that the core game object will do the reactor goodness
