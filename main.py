@@ -1,5 +1,5 @@
 #!/usr/bin/python2 -B
-import sys
+import os
 import pygame
 import math
 import core
@@ -21,7 +21,7 @@ def go():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 pygame.quit()
-                sys.exit() #handle quitting
+                os._exit(0) #handle quitting
             elif event.type == pygame.MOUSEBUTTONUP: #handle clicking
                 mx, my = event.pos
                 game.handleMUP(mx, my)
@@ -35,7 +35,7 @@ def go():
                 k = pygame.key.name(event.key)
                 game.handleKeyDown(k)
                 if "q" in k:
-                    sys.exit()
+                    os._exit(0)
         # call tick function on game which calls it on every object
         game.tick()
         # call the draw function which calls every object
