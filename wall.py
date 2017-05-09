@@ -5,6 +5,7 @@ import sys
 import math
 import sprite
 
+# class for the spikes and wall
 class Terrain(sprite.Sprite):
     def __init__(self, game, x, y, descriptor):
         super(Terrain, self).__init__(game)
@@ -15,6 +16,7 @@ class Terrain(sprite.Sprite):
         return False
 
     
+# class for the wall, descriptor is 0, just renders a rectangle
 class Wall(Terrain):
     def __init__(self, game, x, y, descriptor):
         super(Wall, self).__init__(game, x, y, descriptor)
