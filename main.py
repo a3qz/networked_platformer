@@ -7,15 +7,21 @@ import constants
 from twisted.internet import reactor
 from twisted.internet.task import LoopingCall
 
+# this program is our main executable
+# initilize the things we need (pygame, the game loop, our screen, the clock)
 pygame.init()
 clock = pygame.time.Clock()
 screen = pygame.display.set_mode(constants.SIZE)
 game = core.Game(screen)
 
+# main game loop
 def go():
     try:
+        # handle the pygame events
         for event in pygame.event.get():
-            if event.type == pygame.QUIT: sys.exit() #handle quitting
+            if event.type == pygame.QUIT: 
+                pygame.quit()
+                sys.exit() #handle quitting
             elif event.type == pygame.MOUSEBUTTONUP: #handle clicking
                 mx, my = event.pos
                 game.handleMUP(mx, my)
@@ -30,12 +36,15 @@ def go():
                 game.handleKeyDown(k)
                 if "q" in k:
                     sys.exit()
+        # call tick function on game which calls it on every object
         game.tick()
+        # call the draw function which calls every object
         game.draw()
         pygame.display.flip()
         clock.tick(constants.FPS)
     except Exception as E:
         print "here " + str(E)
+# call go in a loop for the main execution
 lc = LoopingCall(go)
 lc.start(0.001)
 reactor.run()
