@@ -8,17 +8,23 @@ from struct import *
 import sys, getopt
 import constants
 
+# set port number
 CLIN_PORT = 40060
 
+# default mode and port 
 MODE = constants.VERSUS
 LEVEL = 3
 
+# parse command line arguments
 if len(sys.argv) > 3:
     print "Incorrect number of arguments"
     sys.exit(1)
+# if length is two
 elif len(sys.argv) == 2:
+    # if cooperative flag
     if sys.argv[1] == "-c":
         MODE = constants.COOPERATIVE
+    # if versus flag
     elif sys.argv[1] == "-v":
         MODE = constants.VERSUS
     else:
@@ -28,6 +34,7 @@ elif len(sys.argv) == 2:
         print "    -l #  select level number #"
         print "default is versus mode"
         sys.exit(1)
+# if length of 3 (need to fix this)
 elif len(sys.argv) == 3:
     if sys.argv[1] == "-l":
         if int(sys.argv[2]) <= constants.NUM_LEVELS:
@@ -41,23 +48,55 @@ elif len(sys.argv) == 3:
         print "    -l #  select level number #"
         print "default is versus mode"
         sys.exit(1)
+elif len(sys.argv) == 4:
+    if sys.argv[1] == "-l":
+        if int(sys.argv[2]) <= constants.NUM_LEVELS:
+            LEVEL = sys.argv[2]
+        else:
+            print "invalid level number"
+    elif sys.argv[1] == "-c":
+        MODE = constants.COOPERATIVE
+        if sys.argv[2] == "-l":
+            if int(sys.argv[3]) <= constants.NUM_LEVELS:
+                LEVEL = sys.argv[3]
+            else:
+                print "invalid level number"
+    # if versus flag
+    elif sys.argv[1] == "-v":
+        MODE = constants.VERSUS
+        if sys.argv[2] == "-l":
+            if int(sys.argv[3]) <= constants.NUM_LEVELS:
+                LEVEL = sys.argv[3]
+            else:
+                print "invalid level number"
+    else:
+        print "Invalid flag.  Usage: ./server.py -[cv] [-l #]"
+        print "    -v    versus mode"
+        print "    -c    cooperative mode"
+        print "    -l #  select level number #"
+        print "default is versus mode"
+        sys.exit(1)
 
 
 
+# client connection
 class ClientConnection(Protocol):
     def __init__(self, factory, uid):
         self.factory = factory
         self.uid = uid
         pass
 
+    # if connection is made
     def connectionMade(self):
         print("Client connected!")
         self.factory.addMore()
         self.q = DeferredQueue()
 
+    # put callback onto queue
     def startForwarding(self):
         self.q.get().addCallback(self.wordForward)
 
+    # trigger send
     def wordForward(self, data):
         try:
             self.factory.send(self, data)
@@ -89,6 +128,7 @@ class ClientConnection(Protocol):
             else: #otherwise forward it
                 self.factory.send(self, data)
 
+# create factor
 class ClientConnectionFactory(ClientFactory):
     def __init__(self):
         self.cards = set()
@@ -98,34 +138,42 @@ class ClientConnectionFactory(ClientFactory):
         self.addMore()
         self.resetting = False
 
+    # collect a card (add it to the list)
     def collect(self, n):
         self.cards.add(n)
 
+    # transport a card
     def sendCards(self, who):
+        # send the data of which ones are collected
         for n in sorted(list(self.cards)):
             data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
-            #who.transport.write(pack("B", who.uid) + data)
             toSend = pack("B", who.uid) + data
             who.transport.write(toSend)
             if len(toSend) != 22:
                 print "1", len(toSend)
 
+    # return the list
     def buildProtocol(self, addr):
         return self.cons[-1]
 
+    # add a connection
     def addMore(self):
         self.cons.append(ClientConnection(self, self.count))
         self.count += 1
 
+    
+    # transport wrap the uid and send it 
+    # excludes the current person
     def sendMe(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid:
-                #guy.transport.write(pack("B", c.uid) + data)
                 toSend = pack("B", c.uid) + data
                 guy.transport.write(toSend)
                 if len(toSend) != 22:
                     print "2", len(toSend)
 
+    # transfer wrap the buid and send it 
+    # excludes the current person from it
     def send(self, guy, data):
         for c in self.cons:
             if c.uid != guy.uid and c.transport:
@@ -135,6 +183,7 @@ class ClientConnectionFactory(ClientFactory):
                 if len(toSend) != 22:
                     print "3", len(toSend)
         
+    # send packets with uid as 0 for when we dont want to exclude the current guy
     def sendall(self, data):
         for c in self.cons:
             if  c.transport:
@@ -144,11 +193,13 @@ class ClientConnectionFactory(ClientFactory):
                 if len(toSend) != 22:
                     print "3", len(toSend)
 
+    # trigger the reset
     def beginReset(self):
         if not self.resetting:
             self.resetting = True
             Timer(7.5, self.reset).start()
 
+    # actually transmit the reset and change state
     def reset(self):
         print "RESET"
         self.resetting = False
@@ -156,5 +207,7 @@ class ClientConnectionFactory(ClientFactory):
         self.level = 3
         data = pack("BiiiiB", 1, MODE, self.level, 0, 0, 0)
         self.sendall(data)
+
+# start listening
 reactor.listenTCP(CLIN_PORT, ClientConnectionFactory())
 reactor.run()
