@@ -109,6 +109,8 @@ class ClientConnection(Protocol):
         #self.q.put(data)
         for x in range(0, len(d), 21):
             data = d[x:x+21]
+            if len(data) != 21: continue #ignore malformed data
+            
             parsed = unpack("BiiiiB", data[0:21])
             if parsed[0] == 1: #a request for gamemode
                 data = pack("BiiiiB", 1, MODE, self.factory.level, 0, 0, 0)
