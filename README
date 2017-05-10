@@ -41,7 +41,7 @@ the *client* section.
 
 ### Server
 
-Server setup info goes here
+Before connecting any clients first the server needs to be running on ash.  To run the server on ash, from the folder that is running, the basic command is ./server (from our game folder).  It supports several arguments.  It can be supplied with the -v flag, which tells the erver to run in competative/versus mode (so that all clients connecting to it will be put against each other), or the -c flag, for cooperative play, where all players will be on the same team.  The default mode (no flags) is the versus mode.  The next allowed flag is `-l ` followed by a number 0-6 to select a level.  (The three levels that are the most polished are 3,4, 6, and for testing our features level 5 is useful (but it is not especially competative or interesting)).  Beyond that, there is not anything else needed to run the server - it prints out to the terminal whenever a player connects, but other than that the rest of the game information is diplayed in the pygame window.  
 
 ### Client
 
