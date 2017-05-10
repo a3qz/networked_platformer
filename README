@@ -1,1 +1,48 @@
-# Jumping Spaceships - The Game
+# Windows 95 Solitaire - The Platformer
+
+## Info
+
+The game is a platformer with two modes: **cooperative** and **competitive**.
+In **cooperative** the goal is to work together, and in **competitive** it is
+a race to gain the most points. In both modes, you play as a playing card.
+You can walk left with `a`, right with `d`, and jump with `w`. You can
+walk on the gray colored blocks, and die when you either fall too far
+below all of the blocks or when you touch the gray spikes. After dying,
+a short animation will play, and your player will be gone for 5 seconds.
+After this time is up, you will respawn at the start of the level.
+You can jump while standing on a block or while standing on another player.
+You cannot move through other players.
+
+The game is multiplayer - all other players will be represented as jokers to
+you. The game is about collecting other playing cards - you can collect
+a card if and only iff it is one rank below you and it is opposite in color
+to you. I.e. if you are a black king you can only collect a red queen, and
+to collect a red queen you must be a black king.
+The ranks go `King` - `Queen` - `Jack` - `10` - `9` - `8` - `7` - `6` - `5` - 
+`4` - `3` - `2` - `Ace`. At the start of the game, all players are a King.
+All players are always the same rank and color, meaning they can all always
+collect the same cards.
+
+The game ends in either mode once a player has collected an Ace. If the
+game is in **cooperative** mode, then all players currently in the game
+win. If the game is in **competitive** mode, the game checks which player
+has collected the most cards. The player that has collected the most is the
+sole winner. In the case of a tie, all players who tied for first place win.
+Everyone else loses. After a game ends, there will be a brief celebration
+phase followed by a reset.
+
+
+## Setup
+
+There are two main components of this project: the *client* and the *server*.
+See the *server* section for starting the server, which is a necessary first
+step. Then, you may run as many clients as you wish - to do so, check out
+the *client* section.
+
+### Server
+
+Server setup info goes here
+
+### Client
+
+To run the client, open up a 
