@@ -7,7 +7,7 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 
-HOME_HOST = "newt.campus.nd.edu"
+HOME_HOST = "ash.campus.nd.edu"
 HOME_PORT = 40060
 
 class DaBears(Protocol):
