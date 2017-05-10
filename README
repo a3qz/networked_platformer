@@ -45,4 +45,9 @@ Server setup info goes here
 
 ### Client
 
-To run the client, open up a 
+To run the client, open the game's directory (the one that has this file in it,
+so you probably already have it open...) and run main.py.
+To do this on linux you can simply type `./main.py`. You can also run it
+with `python2 main.py`. Once run, the client will connect to the server, and
+the game will begin. Use `a` and `d` to move, and `w` to jump. Collect
+the cards. Win.
