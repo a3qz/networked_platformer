@@ -91,6 +91,7 @@ class ClientConnection(Protocol):
         print("Client connected!")
         self.factory.addMore()
         self.q = DeferredQueue()
+        self.transport.setTcpNoDelay(True)
 
     # put callback onto queue
     def startForwarding(self):

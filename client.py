@@ -7,7 +7,7 @@ from twisted.internet.protocol import ClientFactory
 from twisted.internet.protocol import Protocol
 from twisted.internet import reactor
 
-HOME_HOST = "ash.campus.nd.edu"
+HOME_HOST = "localhost"
 HOME_PORT = 40060
 
 class DaBears(Protocol):
@@ -17,6 +17,7 @@ class DaBears(Protocol):
 
     def connectionMade(self):
         #when we are connected, tell our game state about it
+        self.transport.setTcpNoDelay(True)
         self.game.connected(self)
 
     def dataReceived(self, data):
