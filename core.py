@@ -43,7 +43,7 @@ class Game:
             if self.t == 0:
                 self.sendPlayer()
         except Exception as E:
-            print E
+            pass
 
     # draw item to screen
     def draw(self):
@@ -96,7 +96,6 @@ class Game:
         for x in range(0, len(d), 22):
             data = d[x:x+22]
             if len(data) != 22:
-                print "dropping packet: " + repr(data)
                 return
             uid = unpack("B", data[0])[0]
             data = unpack("BiiiiB", data[1:22])
@@ -117,7 +116,6 @@ class Game:
                 o.rect.y  = data[2]
                 o.vx = data[3]
                 o.vy = data[4]
-                print "PLAYER {} JOINED!".format(uid)
             # if it is a packet of type 1 (specifies gametype or reset)
             elif data[0] == 1: #gametype
                 self.mode = data[1] #VERSUS or COOPERATIVE
@@ -127,7 +125,6 @@ class Game:
                 self.player.rect.y = self.player.ystart
                 self.player.card_count = 0
                 self.losing = 2
-                print data
                 self.level = data[2] #level number
                 self.board.parse("./levels/{}.lvl".format(self.level))
             # if it is a card removal

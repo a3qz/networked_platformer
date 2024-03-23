@@ -21,6 +21,7 @@ def go():
         for event in pygame.event.get():
             if event.type == pygame.QUIT: 
                 pygame.quit()
+                print("lol")
                 os._exit(0) #handle quitting
             elif event.type == pygame.MOUSEBUTTONUP: #handle clicking
                 mx, my = event.pos
@@ -35,6 +36,7 @@ def go():
                 k = pygame.key.name(event.key)
                 game.handleKeyDown(k)
                 if "q" in k:
+                    print("q")
                     os._exit(0)
         # call tick function on game which calls it on every object
         game.tick()
@@ -43,8 +45,10 @@ def go():
         pygame.display.flip()
         clock.tick(constants.FPS)
     except Exception as E:
-        print "here " + str(E)
+        pass
+print("kk")
 # call go in a loop for the main execution
 lc = LoopingCall(go)
 lc.start(0.001)
 reactor.run()
+print("henlo?")

@@ -17,7 +17,6 @@ LEVEL = 3
 
 # parse command line arguments
 if len(sys.argv) > 3:
-    print "Incorrect number of arguments"
     sys.exit(1)
 # if length is two
 elif len(sys.argv) == 2:
@@ -28,54 +27,29 @@ elif len(sys.argv) == 2:
     elif sys.argv[1] == "-v":
         MODE = constants.VERSUS
     else:
-        print "Invalid flag.  Usage: ./server.py -[cv]"
-        print "    -v    versus mode"
-        print "    -c    cooperative mode"
-        print "    -l #  select level number #"
-        print "default is versus mode"
         sys.exit(1)
 # if length of 3 (need to fix this)
 elif len(sys.argv) == 3:
     if sys.argv[1] == "-l":
         if int(sys.argv[2]) <= constants.NUM_LEVELS:
             LEVEL = sys.argv[2]
-        else:
-            print "invalid level number"
     else:
-        print "Invalid flag.  Usage: ./server.py -[cv]"
-        print "    -v    versus mode"
-        print "    -c    cooperative mode"
-        print "    -l #  select level number #"
-        print "default is versus mode"
         sys.exit(1)
 elif len(sys.argv) == 4:
     if sys.argv[1] == "-l":
         if int(sys.argv[2]) <= constants.NUM_LEVELS:
             LEVEL = sys.argv[2]
-        else:
-            print "invalid level number"
     elif sys.argv[1] == "-c":
         MODE = constants.COOPERATIVE
         if sys.argv[2] == "-l":
             if int(sys.argv[3]) <= constants.NUM_LEVELS:
                 LEVEL = sys.argv[3]
-            else:
-                print "invalid level number"
     # if versus flag
     elif sys.argv[1] == "-v":
         MODE = constants.VERSUS
         if sys.argv[2] == "-l":
             if int(sys.argv[3]) <= constants.NUM_LEVELS:
                 LEVEL = sys.argv[3]
-            else:
-                print "invalid level number"
-    else:
-        print "Invalid flag.  Usage: ./server.py -[cv] [-l #]"
-        print "    -v    versus mode"
-        print "    -c    cooperative mode"
-        print "    -l #  select level number #"
-        print "default is versus mode"
-        sys.exit(1)
 
 
 
@@ -88,7 +62,6 @@ class ClientConnection(Protocol):
 
     # if connection is made
     def connectionMade(self):
-        print("Client connected!")
         self.factory.addMore()
         self.q = DeferredQueue()
         self.transport.setTcpNoDelay(True)
@@ -103,7 +76,7 @@ class ClientConnection(Protocol):
             self.factory.send(self, data)
             self.q.get().addCallback(self.wordForward)
         except Exception as E:
-            print E
+            pass
 
     def dataReceived(self, d):
         #self.transport.write(data)
@@ -119,8 +92,6 @@ class ClientConnection(Protocol):
                 #just give it to them
                 toSend = pack("B", self.uid) + data
                 self.transport.write(toSend)
-                if len(toSend) != 22:
-                    print len(toSend)
                 self.factory.sendCards(self)
             elif parsed[0] == 2: #a "i collected something" message
                 self.factory.collect(parsed[1]) #collect the card
@@ -152,8 +123,6 @@ class ClientConnectionFactory(ClientFactory):
             data = pack("BiiiiB", 2, n, 0, 0, 0, 0)
             toSend = pack("B", who.uid) + data
             who.transport.write(toSend)
-            if len(toSend) != 22:
-                print "1", len(toSend)
 
     # return the list
     def buildProtocol(self, addr):
@@ -172,8 +141,6 @@ class ClientConnectionFactory(ClientFactory):
             if c.uid != guy.uid:
                 toSend = pack("B", c.uid) + data
                 guy.transport.write(toSend)
-                if len(toSend) != 22:
-                    print "2", len(toSend)
 
     # transfer wrap the buid and send it 
     # excludes the current person from it
@@ -183,8 +150,6 @@ class ClientConnectionFactory(ClientFactory):
                 #c.transport.write(pack("B", guy.uid) + data)
                 toSend = pack("B", guy.uid) + data
                 c.transport.write(toSend)
-                if len(toSend) != 22:
-                    print "3", len(toSend)
         
     # send packets with uid as 0 for when we dont want to exclude the current guy
     def sendall(self, data):
@@ -193,8 +158,6 @@ class ClientConnectionFactory(ClientFactory):
                 #c.transport.write(pack("B", guy.uid) + data)
                 toSend = pack("B", 0) + data
                 c.transport.write(toSend)
-                if len(toSend) != 22:
-                    print "3", len(toSend)
 
     # trigger the reset
     def beginReset(self):
@@ -204,7 +167,6 @@ class ClientConnectionFactory(ClientFactory):
 
     # actually transmit the reset and change state
     def reset(self):
-        print "RESET"
         self.resetting = False
         self.cards = set()
         self.level = 3
